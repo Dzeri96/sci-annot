@@ -1,0 +1,42 @@
+.fig-cap-widget {
+    padding: 5px;
+    border-bottom: 1px solid #e5e5e5;
+    overflow-x: scroll;
+    white-space: nowrap;
+}
+
+.fig-cap-widget button {
+    /* outline: none;
+    border: none; */
+    display: inline-block;
+    cursor: pointer;
+    opacity: 0.5;
+    margin: 4px;
+}
+
+.fig-cap-widget button.selected, .fig-cap-widget button:hover {
+    opacity: 1;
+}
+
+svg.a9s-annotationlayer .a9s-annotation.RED .a9s-outer {
+    stroke: red;
+    stroke-width: 3;
+    fill: rgba(255, 0, 0, 0.3);
+}
+
+svg.a9s-annotationlayer .a9s-annotation.GREEN .a9s-outer {
+    stroke: green;
+    stroke-width: 3;
+    fill: rgba(0, 255, 0, 0.3);
+}
+
+svg.a9s-annotationlayer .a9s-annotation.BLUE .a9s-outer {
+    stroke: blue;
+    stroke-width: 3;
+    fill: rgba(0, 0, 255, 0.3);
+}
+
+svg.a9s-annotationlayer .a9s-annotation.RED .a9s-inner, svg.a9s-annotationlayer .a9s-annotation.GREEN .a9s-inner, svg.a9s-annotationlayer .a9s-annotation.BLUE .a9s-inner {
+    fill: transparent;
+    stroke: none;
+}
