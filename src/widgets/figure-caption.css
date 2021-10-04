@@ -18,6 +18,10 @@
     opacity: 1;
 }
 
+#annotation-overlay {
+    background-color: chocolate;
+}
+
 svg.a9s-annotationlayer .a9s-annotation.RED .a9s-outer {
     stroke: red;
     stroke-width: 3;

@@ -2,7 +2,6 @@ let OpenSeadragon = require('openseadragon');
 let Annotorious = require('@recogito/annotorious-openseadragon');
 import '@recogito/annotorious-openseadragon/dist/annotorious.min.css';
 import FigCapWidget, { AnnoBody } from '../widgets/figure-caption';
-import { figCapFormatter } from '../widgets/figure-caption';
 import { Vue } from "vue-class-component";
 
 export const classPurpose = 'img-cap-enum';
@@ -22,13 +21,13 @@ export type Annotation = {
 }
 
 export class TwoWayMap {
-    private reverseMap: {[key: string]: string};
+    private reverseMap: { [key: string]: string };
 
     constructor(
-        private map: {[key: string]: string}
+        private map: { [key: string]: string }
     ) {
         this.reverseMap = {};
-        for(const [key, value] of Object.values(map)) {
+        for (const [key, value] of Object.values(map)) {
             this.reverseMap[value] = key;
         }
     }
@@ -47,13 +46,13 @@ export class TwoWayMap {
     public set(side1: string, side2: string) {
         let oldSide2 = this.map[side1];
         // Delete the old side2
-        if(oldSide2){
+        if (oldSide2) {
             delete this.reverseMap[oldSide2];
         }
 
         let currentSide2 = this.reverseMap[side2];
         // Delete side1 that current side2 pointed to
-        if(currentSide2) {
+        if (currentSide2) {
             delete this.map[this.reverseMap[currentSide2]];
         }
 
@@ -63,15 +62,15 @@ export class TwoWayMap {
 
     public unset(side1: string) {
         let side2 = this.map[side1];
-        if(side2) {
+        if (side2) {
             delete this.reverseMap[side2];
             delete this.map[side1];
-        }        
+        }
     }
 
     public revUnset(side2: string) {
         let side1 = this.reverseMap[side2];
-        if(side1) {
+        if (side1) {
             delete this.reverseMap[side2];
             delete this.map[side1];
         }
@@ -81,30 +80,35 @@ export class TwoWayMap {
 export class AnnotationStore {
     public annotations: Annotation[];
     // Map has form friendlyName <=> ID
-    private numIdMap: TwoWayMap;
+    private friendlyIdMap: TwoWayMap;
     private indexParentMap: Map<string, number>;
     private freeParents: string[];
 
     constructor(
-        private parentTypes: string[]
+        private parentTypes: string[],
+        private childTypes: string[]
     ) {
         this.annotations = [];
-        this.numIdMap = new TwoWayMap({});
+        this.friendlyIdMap = new TwoWayMap({});
         this.indexParentMap = new Map();
         this.freeParents = [];
-        for (const parent of this.parentTypes) {
-            this.indexParentMap.set(parent, 1);
+        for (const className of [...this.parentTypes, ...this.childTypes]) {
+            this.indexParentMap.set(className, 1);
         }
     }
 
     public getFriendlyName(id: string): string {
-        let friendlyName = this.numIdMap.revGet(id);
-        if(friendlyName) {
+        let friendlyName = this.friendlyIdMap.revGet(id);
+        if (friendlyName) {
             return friendlyName;
         } else {
-            throw `Id ${id} is not in the friendlyName map!`;
+            console.log(`Friendly name for id ${id} does not exist!`);
+            return undefined;
         }
+    }
 
+    public generateFriendlyName(className: string): string {
+        return className + ' ' + this.indexParentMap.get(className);
     }
 
     public getFreeParentIds(): string[] {
@@ -114,19 +118,19 @@ export class AnnotationStore {
     public getFreeParentsFriendly(): string[] {
         let resultArray = [];
         for (const parentId of this.freeParents) {
-            let friendlyName = this.numIdMap.revGet(parentId);
-            if(friendlyName) {
+            let friendlyName = this.friendlyIdMap.revGet(parentId);
+            if (friendlyName) {
                 resultArray.push(friendlyName);
             } else {
                 throw `ID ${parentId} has no friendly name!`;
             }
         }
         return resultArray;
-    } 
+    }
 
-    private getAnnotationClass(anno: Annotation): string {
+    public getAnnotationClass(anno: Annotation): string {
         let classBody = anno.body.find(bod => bod.purpose == classPurpose);
-        if(classBody) {
+        if (classBody) {
             return classBody.value;
         } else {
             throw 'Annotation has no class: ' + JSON.stringify(anno);
@@ -135,7 +139,7 @@ export class AnnotationStore {
 
     private getAnnotationParentId(anno: Annotation): string {
         let parentBody = anno.body.find(bod => bod.purpose == parentPurpose);
-        if(parentBody) {
+        if (parentBody) {
             return parentBody.value;
         } else {
             // TODO: Maybe add orphan check
@@ -145,7 +149,7 @@ export class AnnotationStore {
 
     public assignChildById(parentId: string) {
         let foundIndex = this.freeParents.indexOf(parentId);
-        if( foundIndex != -1) {
+        if (foundIndex != -1) {
             this.freeParents.splice(foundIndex, 1);
         } else {
             throw `Parent with id ${parentId} already has a child!`;
@@ -154,40 +158,60 @@ export class AnnotationStore {
 
     public releaseChildById(parentId: string) {
         let foundIndex = this.freeParents.indexOf(parentId);
-        if( foundIndex != -1) {
+        if (foundIndex != -1) {
             this.freeParents.push(parentId);
         }
     }
 
+    private refreshFreeParents() {
+        let foundParents = [];
+        let takenParents = new Set();
+
+        for (const currAnno of this.annotations) {
+            let currClass = this.getAnnotationClass(currAnno);
+            if (this.parentTypes.indexOf(currClass) != -1) {
+                foundParents.push(currAnno.id);
+            } else {
+                let parentId = this.getAnnotationParentId(currAnno);
+                if (parentId) takenParents.add(parentId);
+            }
+        }
+
+        this.freeParents = foundParents.filter(id => !takenParents.has(id));
+    }
+
     public addAnnotation = (anno: Annotation) => {
+        console.log(`Adding annotation ${anno.id}`);
         let annoClass = this.getAnnotationClass(anno);
         // Annotation has one of the parent classes.
-        if(this.parentTypes.indexOf(annoClass) != -1) {
-            let currentIndex = this.indexParentMap.get(annoClass);
-            this.indexParentMap.set(annoClass, currentIndex + 1);
-            let friendlyName = annoClass + ' ' + currentIndex;
-
-            this.numIdMap.set(friendlyName, anno.id);
+        if (this.parentTypes.indexOf(annoClass) != -1) {
             this.freeParents.push(anno.id);
         } else {
             let parentId = this.getAnnotationParentId(anno);
-            if(parentId) {
+            if (parentId) {
                 this.assignChildById(parentId);
             }
         }
+
+        let currentIndex = this.indexParentMap.get(annoClass);
+        this.indexParentMap.set(annoClass, currentIndex + 1);
+        let friendlyName = annoClass + ' ' + currentIndex;
+        this.friendlyIdMap.set(friendlyName, anno.id);
 
         this.annotations.push(anno);
     }
 
     public removeAnnotation = (anno: Annotation) => {
+        // TODO: Remove parent ref from caption when removing parent
+        console.log(`Removing annotation ${anno.id}`);
         // Annotation has one of the parent classes
         let annoClass = this.getAnnotationClass(anno);
-        if(this.parentTypes.indexOf(annoClass) != -1) {
+        if (this.parentTypes.indexOf(annoClass) != -1) {
             let parentIndex = this.freeParents.indexOf(anno.id);
             // Parent was free, remove it from the list
-            if(parentIndex != -1) {
+            if (parentIndex != -1) {
                 this.freeParents.splice(parentIndex, 1);
-            // Otherwise, find the child and remove its parent reference
+                // Otherwise, find the child and remove its parent reference
             } else {
                 for (const existingAnno of this.annotations) {
                     let indexToRemove = existingAnno.body.findIndex(
@@ -195,36 +219,34 @@ export class AnnotationStore {
                             bod.purpose == parentPurpose && bod.value == anno.id
                         }
                     )
-
-                    if(indexToRemove != -1) {
+                    if (indexToRemove != -1) {
                         existingAnno.body.splice(indexToRemove, 1);
                     }
                 }
             }
-        // Annotation has one of the child classes
+            // Annotation has one of the child classes
         } else {
             let parentBody = anno.body.find(bod => bod.purpose == parentPurpose);
-
-            if(parentBody) {
+            if (parentBody) {
                 this.freeParents.push(parentBody.value);
             }
         }
 
         let indexToRemove = this.annotations.findIndex(ann => ann.id == anno.id);
-        if(indexToRemove != -1) {
+        if (indexToRemove != -1) {
             this.annotations.splice(indexToRemove, 1);
         }
     }
 
     public updateAnnotation = (anno: Annotation) => {
-        this.removeAnnotation(anno);
-        this.addAnnotation(anno);
+        console.log(`Updating annotation ${anno.id}`);
+        this.refreshFreeParents();
     }
 }
 
 export default class ImageView extends Vue {
-    annotationStore = new AnnotationStore(['Figure', 'Table']);
-    
+    annotationStore = new AnnotationStore(['Figure', 'Table'], ['Caption']);
+
     mounted() {
         let viewer = OpenSeadragon({
             id: 'imview',
@@ -240,11 +262,12 @@ export default class ImageView extends Vue {
             maxZoomLevel: 10
         });
 
-        let figCapWidgetFunc = new FigCapWidget(this.annotationStore).figCapWidget;
+        let figCapWidget = new FigCapWidget(this.annotationStore);
+        let figCapWidgetFunc = figCapWidget.figCapWidget;
 
         let annoConfig = {
             widgets: [figCapWidgetFunc],
-            formatter: figCapFormatter
+            formatter: figCapWidget.figCapFormatter
         }
         let anno = Annotorious(viewer, annoConfig);
         anno.setDrawingTool('rect');

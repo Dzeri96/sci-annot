@@ -13,7 +13,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env", "raw-loader.d.ts", "node"
     ],
     "paths": {
       "@/*": [
@@ -33,7 +33,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "raw-loader.d.ts"  ],
   "exclude": [
     "node_modules"
   ]

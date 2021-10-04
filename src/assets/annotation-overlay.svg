@@ -1,0 +1,12 @@
+<svg width="400" height="110">
+    <defs>
+        <filter x="0" y="0" width="1" height="1" id="solid">
+            <feFlood flood-color="black" result="bg" />
+            <feMerge>
+                <feMergeNode in="bg" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+    <text id="mainText" filter="url(#solid)" x="0" y="15" fill="white"></text>
+</svg> 
