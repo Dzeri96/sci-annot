@@ -1,5 +1,6 @@
-import { Annotation, AnnotationStore, classPurpose, parentPurpose } from '../components/ImageView'
 import rawAnnotationOverlay from '!!raw-loader!../assets/annotation-overlay.svg';
+import AnnotationStore from '@/services/annotationStore';
+import { Annotation, classPurpose, parentPurpose } from '../services/annotationStore';
 
 export type AnnoBody = {
     "type": string,
@@ -138,10 +139,14 @@ export default class FigCapWidget {
                     this.annotationStore.getAnnotationClass(annotation)
                 );
             }
-            svg.childNodes[svg.childNodes.length -2].textContent = friendlyName;
+            svg.childNodes[svg.childNodes.length -4].textContent = friendlyName;
+            svg.childNodes[svg.childNodes.length -2].textContent = 'Childless';
         }
 
+        let annoClass = this.annotationStore.getAnnotationClass(annotation) ?? '';
+
         return {
+            className: annoClass,
             element: svg
         }
     }

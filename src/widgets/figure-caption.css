@@ -22,25 +22,25 @@
     background-color: chocolate;
 }
 
-svg.a9s-annotationlayer .a9s-annotation.RED .a9s-outer {
-    stroke: red;
+svg.a9s-annotationlayer .a9s-annotation.Figure .a9s-outer {
+    stroke: rgba(142, 125, 190, 0.9);;
     stroke-width: 3;
-    fill: rgba(255, 0, 0, 0.3);
+    fill: rgba(142, 125, 190, 0.3);
 }
 
-svg.a9s-annotationlayer .a9s-annotation.GREEN .a9s-outer {
-    stroke: green;
+svg.a9s-annotationlayer .a9s-annotation.Table .a9s-outer {
+    stroke: rgba(191, 126, 137, 0.9);;
     stroke-width: 3;
-    fill: rgba(0, 255, 0, 0.3);
+    fill: rgba(191, 126, 137, 0.3);
 }
 
-svg.a9s-annotationlayer .a9s-annotation.BLUE .a9s-outer {
-    stroke: blue;
+svg.a9s-annotationlayer .a9s-annotation.Caption .a9s-outer {
+    stroke: rgba(104, 141, 189, 0.9);;
     stroke-width: 3;
-    fill: rgba(0, 0, 255, 0.3);
+    fill: rgba(104, 141, 189, 0.3);
 }
 
-svg.a9s-annotationlayer .a9s-annotation.RED .a9s-inner, svg.a9s-annotationlayer .a9s-annotation.GREEN .a9s-inner, svg.a9s-annotationlayer .a9s-annotation.BLUE .a9s-inner {
+svg.a9s-annotationlayer .a9s-annotation.Figure .a9s-inner, svg.a9s-annotationlayer .a9s-annotation.Table .a9s-inner, svg.a9s-annotationlayer .a9s-annotation.Caption .a9s-inner {
     fill: transparent;
     stroke: none;
 }

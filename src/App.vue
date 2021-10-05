@@ -1,8 +1,8 @@
 <template>
   <html style="height:100%">
-    <header></header>
+    <header><app-header :annotation-store="store"/></header>
     <main>
-      <image-view />
+      <image-view :annotation-store="store"/>
     </main>
     <footer></footer>
   </html>
@@ -12,17 +12,26 @@
 import { Options, Vue } from 'vue-class-component';
 import HelloWorld from './components/HelloWorld.vue';
 import ImageView from './components/ImageView.vue';
+import AppHeader from './components/Header.vue'
+import AnnotationStore from './services/annotationStore';
 
 @Options({
   components: {
     HelloWorld,
-    ImageView
+    ImageView,
+    AppHeader
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  store = new AnnotationStore(['Figure', 'Table'], ['Caption']);
+}
 </script>
 
 <style>
+* {
+    font-family: 'Lato', sans-serif;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -33,12 +42,9 @@ export default class App extends Vue {}
 }
 
 main {
-  outline: blue;
   outline-width: 1px;
   height: 100%;
   width: 100%;
-  border: blue;
-  border-style: solid;
   display: flex;
 }
 
