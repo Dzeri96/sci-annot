@@ -133,21 +133,39 @@ export default class FigCapWidget {
         return template.content.firstChild;
     }
 
-    public figCapFormatter = (annotation: Annotation) => {
+    public figCapFormatter = (annotation: {underlying: Annotation}) => {
+        //console.log('Formatter called with: ' + JSON.stringify(annotation))
+        let underlying = annotation.underlying;
         let svg = this.htmlToElement(rawAnnotationOverlay);
-        if(annotation.body.length != 0) {
-            let friendlyName = this.annotationStore.getFriendlyName(annotation.id);
+        if(underlying.body.length != 0) {
+            let friendlyName = this.annotationStore.getFriendlyName(underlying.id);
 
             if(!friendlyName) {
                 friendlyName = this.annotationStore.generateFriendlyName(
-                    this.annotationStore.getAnnotationClass(annotation)
+                    this.annotationStore.getAnnotationClass(underlying)
                 );
             }
             svg.childNodes[svg.childNodes.length -4].textContent = friendlyName;
-            svg.childNodes[svg.childNodes.length -2].textContent = 'Childless';
         }
 
-        let annoClass = this.annotationStore.getAnnotationClass(annotation) ?? '';
+        let annoClass = this.annotationStore.getAnnotationClass(underlying) ?? '';
+        console.log(`annoClass: ${annoClass}`)
+
+        if(annoClass) {
+            if (this.annotationStore.childTypes.indexOf(annoClass) != -1) {
+                let parent = this.annotationStore.getAnnotationParentId(underlying);
+                if(!parent) {
+                    svg.childNodes[svg.childNodes.length -2].textContent = 'Parentless';
+                }
+            } else if (this.annotationStore.parentTypes.indexOf(annoClass) != -1) {
+                console.log('Coming here!');
+                let isFree = this.annotationStore.getFreeParentIds().indexOf(underlying.id) != -1;
+                if (isFree) {
+                    svg.childNodes[svg.childNodes.length -2].textContent = 'Childless';
+                }
+            }
+        }
+        
 
         return {
             className: annoClass,

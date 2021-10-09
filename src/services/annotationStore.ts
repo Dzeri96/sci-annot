@@ -80,8 +80,8 @@ export default class AnnotationStore {
     
 
     constructor(
-        private parentTypes: string[],
-        private childTypes: string[],
+        public parentTypes: string[],
+        public childTypes: string[],
         public annotations?: Annotation[],
         public freeParents?: string[]
     ) {
@@ -134,7 +134,7 @@ export default class AnnotationStore {
         }
     }
 
-    private getAnnotationParentId(anno: Annotation): string {
+    public getAnnotationParentId(anno: Annotation): string {
         let parentBody = anno.body.find(bod => bod.purpose == parentPurpose);
         if (parentBody) {
             return parentBody.value;

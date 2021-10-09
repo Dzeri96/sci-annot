@@ -9,5 +9,5 @@
         </filter>
     </defs>
     <text id="mainText" filter="url(#solid)" x="2" y="15" fill="white"></text>
-    <text id="mainText" filter="url(#solid)" x="2" y="35" fill="white"></text>
+    <text id="mainText" filter="url(#solid)" x="2" y="35" fill="red"></text>
 </svg> 

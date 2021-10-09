@@ -13,6 +13,7 @@ import AnnotationStore from '@/services/annotationStore';
 })
 export default class ImageView extends Vue {
     annotationStore!: AnnotationStore;
+    private anno;
 
     mounted() {
         let viewer = OpenSeadragon({
@@ -38,16 +39,31 @@ export default class ImageView extends Vue {
             widgets: [figCapWidgetFunc],
             formatter: figCapWidget.figCapFormatter
         }
-        let anno = Annotorious(viewer, annoConfig);
-        anno.setDrawingTool('rect');
+        this.anno = Annotorious(viewer, annoConfig);
+        this.anno.setDrawingTool('rect');
         //console.log(anno.listDrawingTools());
-        anno.setVisible(true)
+        this.anno.setVisible(true)
 
-        anno.on('createAnnotation', this.annotationStore.addAnnotation);
+       this. anno.on('createAnnotation', (annot) => {
+            this.annotationStore.addAnnotation(annot);
+            this.reRenderAnnotations();
+        });
 
-        anno.on('deleteAnnotation', this.annotationStore.removeAnnotation);
+        this.anno.on('deleteAnnotation', (annot) => {
+            this.annotationStore.removeAnnotation(annot);
+            this.reRenderAnnotations();
+        });
 
-        anno.on('updateAnnotation', this.annotationStore.updateAnnotation);
+        this.anno.on('updateAnnotation', (annot, oldAnnot) => {
+            this.annotationStore.updateAnnotation(annot);
+            this.reRenderAnnotations();
+        });
+    }
 
+    /**
+     * Refresh the annotations shown on screen
+     */
+    reRenderAnnotations() {
+        this.anno.setAnnotations(this.anno.getAnnotations());
     }
 }
