@@ -57,5 +57,7 @@ body {
   height: 100vh;
   max-height: 100vh;
   margin: 0px;
+  display: flex;
+  flex-flow: column;
 }
 </style>

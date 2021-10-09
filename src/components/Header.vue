@@ -7,7 +7,6 @@
 
 <script lang="ts">
 import AnnotationStore from '@/services/annotationStore';
-import { Annotation } from '@/services/annotationStore';
 import { Vue } from 'vue-class-component';
 import { Prop } from 'vue-property-decorator';
 
