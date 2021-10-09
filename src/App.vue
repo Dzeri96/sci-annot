@@ -24,7 +24,7 @@ import { reactive } from 'vue';
 export default class App extends Vue {
   reactiveAnnos: Annotation[] = reactive([]);
   reactiveParents: string[] = reactive([]);
-  store = new AnnotationStore(['Figure', 'Table'], ['Caption'], this.reactiveAnnos, this.reactiveParents);
+  store = new AnnotationStore(['Figure', 'Table'], ['Caption'], undefined, this.reactiveParents);
 
   mounted() {
     // Inject reactivity
@@ -47,10 +47,7 @@ export default class App extends Vue {
 }
 
 main {
-  outline-width: 1px;
-  height: 100%;
-  width: 100%;
-  display: flex;
+  flex: 1 1 auto;
 }
 
 body {

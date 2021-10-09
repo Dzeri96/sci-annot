@@ -140,7 +140,7 @@ export default class AnnotationStore {
             return parentBody.value;
         } else {
             // TODO: Maybe add orphan check
-            console.log('Added child without parent!');
+            return undefined;
         }
     }
 
@@ -174,7 +174,9 @@ export default class AnnotationStore {
             }
         }
 
-        this.freeParents = foundParents.filter(id => !takenParents.has(id));
+        // Keeps reference to reactive array
+        this.freeParents.length = 0;
+        this.freeParents.push(...foundParents.filter(id => !takenParents.has(id)));
     }
 
     public addAnnotation = (anno: Annotation) => {
@@ -238,6 +240,8 @@ export default class AnnotationStore {
 
     public updateAnnotation = (anno: Annotation) => {
         console.log(`Updating annotation ${anno.id}`);
+        let foundIndex = this.annotations.findIndex(ann => ann.id == anno.id);
+        this.annotations.splice(foundIndex, 1, anno);
         this.refreshFreeParents();
     }
 }
