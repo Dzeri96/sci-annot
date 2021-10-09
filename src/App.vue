@@ -1,11 +1,9 @@
 <template>
-  <html style="height:100%">
-    <header><app-header :annotation-store="store"/></header>
+  <header><app-header :annotationStore="store"/></header>
     <main>
       <image-view :annotation-store="store"/>
     </main>
     <footer></footer>
-  </html>
 </template>
 
 <script lang="ts">
@@ -13,7 +11,8 @@ import { Options, Vue } from 'vue-class-component';
 import HelloWorld from './components/HelloWorld.vue';
 import ImageView from './components/ImageView.vue';
 import AppHeader from './components/Header.vue'
-import AnnotationStore from './services/annotationStore';
+import AnnotationStore, { Annotation } from './services/annotationStore';
+import { reactive } from 'vue';
 
 @Options({
   components: {
@@ -23,7 +22,14 @@ import AnnotationStore from './services/annotationStore';
   },
 })
 export default class App extends Vue {
-  store = new AnnotationStore(['Figure', 'Table'], ['Caption']);
+  reactiveAnnos: Annotation[] = reactive([]);
+  reactiveParents: string[] = reactive([]);
+  store = new AnnotationStore(['Figure', 'Table'], ['Caption'], this.reactiveAnnos, this.reactiveParents);
+
+  mounted() {
+    // Inject reactivity
+    //this.store.freeParents = this.reactiveParents;
+  }
 }
 </script>
 
@@ -38,7 +44,6 @@ export default class App extends Vue {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
 main {
@@ -50,5 +55,7 @@ main {
 
 body {
   height: 100vh;
+  max-height: 100vh;
+  margin: 0px;
 }
 </style>

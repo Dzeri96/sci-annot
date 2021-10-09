@@ -97,12 +97,15 @@ export default class FigCapWidget {
         if (currentClass == 'Caption') {
             let container3 = document.createElement('div');
             container3.className = 'fig-cap-widget'
+            let container3Text = document.createElement('div');
+            container3Text.textContent = 'References:';
+            container3Text.style.paddingLeft = '4px'
+            container3.appendChild(container3Text);
             let container2 = document.createElement('span');
-            container2.className = 'fig-cap-widget';
             container2.id = 'container2'
             container3.appendChild(container2);
-            let potentialParentIDs = this.annotationStore.getFreeParentIds();
-            console.log('PotentialParents: ' + potentialParentIDs);
+            // Make a copy of the array
+            let potentialParentIDs = [...this.annotationStore.getFreeParentIds()];
             // Show the current parent button only on the child widget
             if (currentParent && potentialParentIDs.indexOf(currentParent) == -1) {
                 potentialParentIDs.unshift(currentParent);

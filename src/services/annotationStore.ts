@@ -74,20 +74,21 @@ export class TwoWayMap {
 }
 
 export default class AnnotationStore {
-    public annotations: Annotation[];
     // Map has form friendlyName <=> ID
     private friendlyIdMap: TwoWayMap;
     private indexParentMap: Map<string, number>;
-    private freeParents: string[];
+    
 
     constructor(
         private parentTypes: string[],
-        private childTypes: string[]
+        private childTypes: string[],
+        public annotations?: Annotation[],
+        public freeParents?: string[]
     ) {
-        this.annotations = [];
         this.friendlyIdMap = new TwoWayMap({});
         this.indexParentMap = new Map();
-        this.freeParents = [];
+        if(!freeParents) this.freeParents = [];
+        if(!annotations) this.annotations = [];
         for (const className of [...this.parentTypes, ...this.childTypes]) {
             this.indexParentMap.set(className, 1);
         }

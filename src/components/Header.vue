@@ -1,23 +1,29 @@
 <template>
     <div class="headerContainer">
+        <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}}</span>
         <button id="submitButton" @click="submit">Submit</button>
     </div>
 </template>
 
 <script lang="ts">
 import AnnotationStore from '@/services/annotationStore';
-import { Options, Vue } from 'vue-class-component'
+import { Annotation } from '@/services/annotationStore';
+import { Vue } from 'vue-class-component';
+import { Prop } from 'vue-property-decorator';
 
-@Options({
-    props: {
-        annotationStore: AnnotationStore
-    }
-})
 export default class AppHeader extends Vue {
-    annotationStore!: AnnotationStore;
+    @Prop()
+    private annotationStore: AnnotationStore;
+    private counter = 0;
 
     private submit() {
-        console.log('Annotations: ' + JSON.stringify(this.annotationStore.annotations));
+        console.log('Annotations: ' + JSON.stringify(this.annotationStore));
+    }
+
+    mounted() {
+        setInterval(() => {
+        this.counter++
+        }, 1000)
     }
 }
 
