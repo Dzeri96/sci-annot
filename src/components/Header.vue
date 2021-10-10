@@ -7,22 +7,33 @@
 
 <script lang="ts">
 import AnnotationStore from '@/services/annotationStore';
-import { Vue } from 'vue-class-component';
+import { Vue } from "vue-class-component";
 import { Prop } from 'vue-property-decorator';
 
 export default class AppHeader extends Vue {
     @Prop()
     private annotationStore: AnnotationStore;
     private counter = 0;
+    // Injected from package.json by webpack
+    private version = '[AIV]{version}[/AIV]';
 
     private submit() {
-        console.log('Annotations: ' + JSON.stringify(this.annotationStore));
+        let result = {
+            version: this.version,
+            timeSec: this.counter,
+            annotations: this.annotationStore.annotations 
+        }
+        console.log('Result: ' + JSON.stringify(result));
     }
 
     mounted() {
+        // Start counter
         setInterval(() => {
         this.counter++
         }, 1000)
+
+        // Get version
+        console.log(`App version: ${this.version}`);
     }
 }
 
@@ -38,6 +49,6 @@ export default class AppHeader extends Vue {
     background-color: rgba(212, 212, 212, 0.345);
     border: white;
     border-style: solid;
-    border-width: 0px 0px 2px 0px;
+    border-width: 2px 0px 2px 0px;
 }
 </style>

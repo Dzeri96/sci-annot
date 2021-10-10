@@ -25,11 +25,6 @@ export default class App extends Vue {
   reactiveAnnos: Annotation[] = reactive([]);
   reactiveParents: string[] = reactive([]);
   store = new AnnotationStore(['Figure', 'Table'], ['Caption'], undefined, this.reactiveParents);
-
-  mounted() {
-    // Inject reactivity
-    //this.store.freeParents = this.reactiveParents;
-  }
 }
 </script>
 
