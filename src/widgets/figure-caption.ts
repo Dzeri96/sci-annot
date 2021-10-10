@@ -26,13 +26,11 @@ export default class FigCapWidget {
 
         var setClass = function (evt: any) {
             if (currentClass) {
-                classBody.value = evt.target.dataset.tag;
-                args.onUpdateBody(currentClass, {
+                args.onUpdateBody(classBody, {
                     type: 'TextualBody',
                     purpose: classPurpose,
                     value: evt.target.dataset.tag
                 });
-                console.log(classBody)
             } else {
                 args.onAppendBody({
                     type: 'TextualBody',
@@ -44,8 +42,7 @@ export default class FigCapWidget {
 
         var setParent = function (evt: any) {
             if (currentParent) {
-                parentBody.value = evt.target.dataset.tag;
-                args.onUpdateBody(currentParent, {
+                args.onUpdateBody(parentBody, {
                     type: 'TextualBody',
                     purpose: parentPurpose,
                     value: evt.target.dataset.tag
@@ -95,21 +92,31 @@ export default class FigCapWidget {
         }
 
         if (currentClass == 'Caption') {
-            let container3 = document.createElement('div');
-            container3.className = 'fig-cap-widget'
-            let container3Text = document.createElement('div');
-            container3Text.textContent = 'References:';
-            container3Text.style.paddingLeft = '4px'
-            container3.appendChild(container3Text);
-            let container2 = document.createElement('span');
+            let parentSelectionContainer = document.createElement('div');
+            
+            let parentSelectionTextBox = document.createElement('span');
+            let referencesLabel = document.createElement('span');
+            referencesLabel.textContent = 'References: ';
+            let currParentLabel = document.createElement('span');
+            if(currentParent){
+                currParentLabel.textContent = this.annotationStore.getFriendlyName(currentParent);
+            } 
+            
+            parentSelectionTextBox.style.paddingLeft = '4px'
+            parentSelectionTextBox.appendChild(referencesLabel);
+            parentSelectionTextBox.appendChild(currParentLabel);
+
+            parentSelectionContainer.appendChild(parentSelectionTextBox);
+            let container2 = document.createElement('div');
             container2.id = 'container2'
-            container3.appendChild(container2);
+            container2.className = 'fig-cap-widget';
+            parentSelectionContainer.appendChild(container2);
             // Make a copy of the array
             let potentialParentIDs = [...this.annotationStore.getFreeParentIds()];
             // Show the current parent button only on the child widget
-            if (currentParent && potentialParentIDs.indexOf(currentParent) == -1) {
+            /* if (currentParent && potentialParentIDs.indexOf(currentParent) == -1) {
                 potentialParentIDs.unshift(currentParent);
-            }
+            } */
             for (const potentialParentId of potentialParentIDs) {
                 let newButton = createButton(
                     this.annotationStore.getFriendlyName(potentialParentId),
@@ -120,7 +127,7 @@ export default class FigCapWidget {
 
             }
 
-            if(potentialParentIDs.length != 0) root.appendChild(container3);
+            if(potentialParentIDs.length != 0) root.appendChild(parentSelectionContainer);
         }
 
         return root;
@@ -149,7 +156,6 @@ export default class FigCapWidget {
         }
 
         let annoClass = this.annotationStore.getAnnotationClass(underlying) ?? '';
-        console.log(`annoClass: ${annoClass}`)
 
         if(annoClass) {
             if (this.annotationStore.childTypes.indexOf(annoClass) != -1) {
@@ -158,7 +164,6 @@ export default class FigCapWidget {
                     svg.childNodes[svg.childNodes.length -2].textContent = 'Parentless';
                 }
             } else if (this.annotationStore.parentTypes.indexOf(annoClass) != -1) {
-                console.log('Coming here!');
                 let isFree = this.annotationStore.getFreeParentIds().indexOf(underlying.id) != -1;
                 if (isFree) {
                     svg.childNodes[svg.childNodes.length -2].textContent = 'Childless';

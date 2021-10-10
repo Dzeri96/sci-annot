@@ -29,7 +29,8 @@ export default class ImageView extends Vue {
             navigatorPosition: 'BOTTOM_RIGHT',
             maxZoomLevel: 10,
             showZoomControl: false,
-            showFullPageControl: false
+            showFullPageControl: false,
+            showHomeControl: false
         });
 
         let figCapWidget = new FigCapWidget(this.annotationStore);
@@ -41,10 +42,9 @@ export default class ImageView extends Vue {
         }
         this.anno = Annotorious(viewer, annoConfig);
         this.anno.setDrawingTool('rect');
-        //console.log(anno.listDrawingTools());
         this.anno.setVisible(true)
 
-       this. anno.on('createAnnotation', (annot) => {
+        this.anno.on('createAnnotation', (annot) => {
             this.annotationStore.addAnnotation(annot);
             this.reRenderAnnotations();
         });

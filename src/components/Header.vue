@@ -34,5 +34,10 @@ export default class AppHeader extends Vue {
     justify-content: flex-end;
     padding: 0px 5px 5px 5px;
     margin: 0;
-}   
+    padding: 4px;
+    background-color: rgba(212, 212, 212, 0.345);
+    border: white;
+    border-style: solid;
+    border-width: 0px 0px 2px 0px;
+}
 </style>
