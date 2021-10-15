@@ -1,7 +1,14 @@
 <template>
     <div class="headerContainer">
         <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}}</span>
-        <button id="submitButton" @click="submit">Submit</button>
+        <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
+            <input type="hidden" name="assignmentId" :value="assignmentId">
+            <input type="hidden" name="appVersion" :value="appVersion"/>
+            <input type="hidden" name="secondCounter" :value="counter"/>
+            <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
+            <input type="submit" id="submitButton" value="Submit"/>
+        </form>
+        <button id="submitButton" @click="submit">Test</button>
     </div>
 </template>
 
@@ -14,12 +21,17 @@ export default class AppHeader extends Vue {
     @Prop()
     private annotationStore: AnnotationStore;
     private counter = 0;
-    // Injected from package.json by webpack
-    private version = '[AIV]{version}[/AIV]';
+    private urlParams = new URLSearchParams(window.location.search);
+    // Injected from package.json
+    private appVersion = process.env.VUE_APP_VERSION;
+    // Placeholder value for the MTurk assignment id
+    private assignmentId = 'NO_ID';
+    // Placeholder value for the MTurk submit link
+    private turkSubmitTo = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
 
     private submit() {
         let result = {
-            version: this.version,
+            version: this.appVersion,
             timeSec: this.counter,
             annotations: this.annotationStore.annotations 
         }
@@ -33,7 +45,15 @@ export default class AppHeader extends Vue {
         }, 1000)
 
         // Get version
-        console.log(`App version: ${this.version}`);
+        console.log(`App version: ${this.appVersion}`);
+
+        // Get assignment id from URL params
+        let idParam = this.urlParams.get('assignmentId');
+        if (idParam) this.assignmentId = idParam;
+
+        // Get submit link from URL params
+        let submitParam = this.urlParams.get('turkSubmitTo');
+        if (submitParam) this.turkSubmitTo = submitParam;
     }
 }
 

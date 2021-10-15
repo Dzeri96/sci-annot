@@ -15,7 +15,7 @@ export default class FigCapWidget {
     ) { }
 
     public figCapWidget = (args: any) => {
-        console.log('Args: ' + JSON.stringify(args));
+        //console.log('Args: ' + JSON.stringify(args));
 
         let bodies: AnnoBody[] = args.annotation.bodies;
         let classBody = bodies.find(bod => bod.purpose == classPurpose)

@@ -1,19 +1,13 @@
-var WebpackAutoInject = require('webpack-auto-inject-version');
+
+// The app version is available in the code
+process.env.VUE_APP_VERSION = process.env.npm_package_version;
 
 module.exports = {
   lintOnSave: false,
   configureWebpack: {
     devtool: 'source-map',
     optimization: {
-      minimize: true,
-    },
-    plugins: [
-      new WebpackAutoInject({
-        components: {
-          AutoIncreaseVersion: false,
-          InjectAsComment: false
-        }
-      })
-    ]
+      minimize: true
+    }
   }
 }
