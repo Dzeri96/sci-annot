@@ -37,7 +37,9 @@ export default class ImageView extends Vue {
         let figCapWidgetFunc = figCapWidget.figCapWidget;
 
         let annoConfig = {
-            widgets: [figCapWidgetFunc],
+            widgets: [
+                {widget: figCapWidgetFunc, force: 'plainjs'}
+            ],
             formatter: figCapWidget.figCapFormatter
         }
         this.anno = Annotorious(viewer, annoConfig);

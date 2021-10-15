@@ -5,12 +5,10 @@ module.exports = {
   configureWebpack: {
     devtool: 'source-map',
     optimization: {
-      minimize: true
+      minimize: true,
     },
     plugins: [
       new WebpackAutoInject({
-        // options
-        // example:
         components: {
           AutoIncreaseVersion: false,
           InjectAsComment: false

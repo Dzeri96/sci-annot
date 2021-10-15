@@ -8,11 +8,11 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@recogito/annotorious-openseadragon": "^2.5.6",
+    "@recogito/annotorious-openseadragon": "^2.5.7",
     "@types/openseadragon": "^2.4.8",
-    "core-js": "^3.6.5",
+    "core-js": "^3.18.3",
     "openseadragon": "^2.4.2",
-    "vue": "^3.0.0",
+    "vue": "^3.2.20",
     "vue-class-component": "^8.0.0-0",
     "vue-property-decorator": "^10.0.0-rc.3"
   },
@@ -23,11 +23,11 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-typescript": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
+    "@vue/compiler-sfc": "^3.2.20",
     "@vue/eslint-config-typescript": "^7.0.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0",
+    "eslint-plugin-vue": "^7.19.1",
     "raw-loader": "^4.0.2",
     "typescript": "~4.1.5",
     "webpack-auto-inject-version": "^1.2.2"
