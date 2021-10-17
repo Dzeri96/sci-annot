@@ -21,6 +21,17 @@ module.exports = {
         inlineSource: '.(js|css)$' // embed all javascript and css inline
       }),
       new HtmlWebpackInlineSourcePlugin()
-    ]
+    ],
+    module: {
+      rules: [
+        {
+          test: /\.m?js$/,
+//          exclude: /node_modules/,
+          use: {
+            loader: "babel-loader"
+          }
+        }
+      ]
+    }
   }
 }
