@@ -1,6 +1,7 @@
 <template>
-  <header><app-header :annotationStore="store"/></header>
+  <header><app-header @toggle-tutorial="toggleTutorial" :annotationStore="store" :isTutorialVisible="isTutorialVisible"/></header>
     <main>
+      <tutorial :class="{collapse: !isTutorialVisible}"/>
       <image-view :annotation-store="store"/>
     </main>
     <footer></footer>
@@ -10,6 +11,7 @@
 import { Options, Vue } from 'vue-class-component';
 import HelloWorld from './components/HelloWorld.vue';
 import ImageView from './components/ImageView.vue';
+import Tutorial from './components/Tutorial.vue';
 import AppHeader from './components/Header.vue'
 import AnnotationStore, { Annotation } from './services/annotationStore';
 import { reactive } from 'vue';
@@ -18,13 +20,19 @@ import { reactive } from 'vue';
   components: {
     HelloWorld,
     ImageView,
-    AppHeader
+    AppHeader,
+    Tutorial
   },
 })
 export default class App extends Vue {
+  isTutorialVisible: boolean = false;
   reactiveAnnos: Annotation[] = reactive([]);
   reactiveParents: string[] = reactive([]);
   store = new AnnotationStore(['Figure', 'Table'], ['Caption'], undefined, this.reactiveParents);
+
+  toggleTutorial() {
+    this.isTutorialVisible = !this.isTutorialVisible;
+  }
 }
 </script>
 
@@ -42,7 +50,10 @@ export default class App extends Vue {
 }
 
 main {
-  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  transition: all 2s;
 }
 
 body {
@@ -52,4 +63,8 @@ body {
   display: flex;
   flex-flow: column;
 }
+
+.collapse {
+    	flex-grow: 0.001;
+	}
 </style>

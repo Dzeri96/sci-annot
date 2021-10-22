@@ -1,6 +1,7 @@
 <template>
     <div class="headerContainer">
-        <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}}</span>
+        <button @click="this.$emit('toggle-tutorial')"> TUT </button>
+        <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}} {{isTutorialVisible}}</span>
         <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
             <input type="hidden" name="assignmentId" :value="assignmentId">
             <input type="hidden" name="appVersion" :value="appVersion"/>
@@ -20,6 +21,9 @@ import { Prop } from 'vue-property-decorator';
 export default class AppHeader extends Vue {
     @Prop()
     private annotationStore: AnnotationStore;
+    @Prop()
+    private isTutorialVisible: boolean;
+
     private counter = 0;
     private urlParams = new URLSearchParams(window.location.search);
     // Injected from package.json
@@ -66,7 +70,6 @@ export default class AppHeader extends Vue {
     padding: 0px 5px 5px 5px;
     margin: 0;
     padding: 4px;
-    background-color: rgba(212, 212, 212, 0.345);
     border: white;
     border-style: solid;
     border-width: 2px 0px 2px 0px;
