@@ -1,6 +1,8 @@
 <template>
   <div class="tut-body">
-	  <div> Radi li? </div>
+		<div class="tut-content">
+			<p>Radi li?</p>
+		</div>
   </div>
 </template>
 
@@ -14,14 +16,22 @@ export default class ModalTutorial extends Vue {
 <style scoped>
 	.tut-body {
 		height: 100%;
+		box-sizing: border-box;
 		flex-grow: 1;
-		transition: all 0.5s;
+		transition: all 0.35s;
 		min-width: 0;
+		width: 0;
 		overflow: hidden;
 		flex-shrink: 0;
+		z-index: 1;
 	}
 
 	.collapse {
     	flex-grow: 0.001;
+	}
+
+	.tut-content {
+		overflow: hidden;
+		width: 20vw;
 	}
 </style>

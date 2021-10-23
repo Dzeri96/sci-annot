@@ -1,16 +1,20 @@
 <template>
-    <div class="headerContainer">
-        <button @click="this.$emit('toggle-tutorial')"> TUT </button>
-        <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}} {{isTutorialVisible}}</span>
-        <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
-            <input type="hidden" name="assignmentId" :value="assignmentId">
-            <input type="hidden" name="appVersion" :value="appVersion"/>
-            <input type="hidden" name="secondCounter" :value="counter"/>
-            <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
-            <input type="submit" id="submitButton" value="Submit"/>
-        </form>
-        <button id="submitButton" @click="submit">Test</button>
-    </div>
+    <span class="header-container">
+        <span class="left-header">
+            <button @click="this.$emit('toggle-tutorial')" :class="{'button-selected': isTutorialVisible}"> TUT </button>
+        </span>
+        <div class="right-header">
+           <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}} {{isTutorialVisible}}</span>
+            <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
+                <input type="hidden" name="assignmentId" :value="assignmentId">
+                <input type="hidden" name="appVersion" :value="appVersion"/>
+                <input type="hidden" name="secondCounter" :value="counter"/>
+                <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
+                <input type="submit" id="submitButton" value="Submit"/>
+            </form>
+            <button id="submitButton" @click="submit">Test</button>
+        </div>
+    </span>
 </template>
 
 <script lang="ts">
@@ -64,14 +68,23 @@ export default class AppHeader extends Vue {
 </script>
 
 <style scoped>
-.headerContainer {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0px 5px 5px 5px;
-    margin: 0;
-    padding: 4px;
-    border: white;
-    border-style: solid;
-    border-width: 2px 0px 2px 0px;
-}
+    .header-container {
+        display: flex;
+        padding: 0px 4px 4px 4px;
+        margin: 0;
+        padding: 4px;
+        border: white;
+        border-style: solid;
+        border-width: 2px 0px 2px 0px;
+    }
+
+    .left-header {
+        flex-grow: 1;
+    }
+
+    .right-header * {
+        display: inline-block;
+        margin-left: 4px;
+    }
+
 </style>
