@@ -47,8 +47,8 @@
   border: 10px solid white; /* Light grey */
   border-top: 10px solid #3498db; /* Blue */
   border-radius: 50%;
-  width: 10vh;
-  height: 10vh;
+  width: 7em;
+  height: 7em;
   animation: spin 1s linear infinite;
 }
 

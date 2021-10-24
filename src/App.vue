@@ -69,36 +69,45 @@ body {
 	}
 
 /* CSS */
-button {
+button,
+input[type="submit"] {
   background-color: #FFFFFF;
   border: 1px solid rgb(209,213,219);
   border-radius: 5px;
   padding: 3px;
-  box-sizing: border-box;
   text-align: center;
   text-decoration: none #D1D5DB solid;
   text-decoration-thickness: auto;
-  cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
+  font-size: 1em;
 }
 
-button:hover {
+button:enabled,
+input[type=submit]:enabled {
+  cursor: pointer;
+}
+
+button:hover,
+input:hover[type=submit]:enabled {
   background-color: rgb(245, 245, 245);
 }
 
 button:active,
-button.selected {
+button.selected,
+input:active[type=submit]:enabled {
   background-color: rgb(229, 229, 229);
 }
 
-button:focus {
+button:focus,
+input:focus[type=submit]:enabled {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-button:focus-visible {
+button:focus-visible,
+input:focus-visible[type=submit] {
   box-shadow: none;
 }
 </style>

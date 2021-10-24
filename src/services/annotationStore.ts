@@ -77,7 +77,7 @@ export default class AnnotationStore {
     // Map has form friendlyName <=> ID
     private friendlyIdMap: TwoWayMap;
     private indexParentMap: Map<string, number>;
-    
+    public nrOrphans: number;
 
     constructor(
         public parentTypes: string[],
@@ -87,6 +87,7 @@ export default class AnnotationStore {
     ) {
         this.friendlyIdMap = new TwoWayMap({});
         this.indexParentMap = new Map();
+        this.nrOrphans = 0;
         if(!freeParents) this.freeParents = [];
         if(!annotations) this.annotations = [];
         for (const className of [...this.parentTypes, ...this.childTypes]) {
@@ -179,6 +180,20 @@ export default class AnnotationStore {
         this.freeParents.push(...foundParents.filter(id => !takenParents.has(id)));
     }
 
+    private refreshOrphans() {
+        let counter = 0;
+
+        for (const currAnno of this.annotations) {
+            let currClass = this.getAnnotationClass(currAnno);
+            if (this.parentTypes.indexOf(currClass) == -1) {
+                let parentId = this.getAnnotationParentId(currAnno);
+                if (!parentId) counter++;
+            }
+        }
+
+        this.nrOrphans = counter;
+    }
+
     public addAnnotation = (anno: Annotation) => {
         console.log(`Adding annotation ${anno.id}`);
         let annoClass = this.getAnnotationClass(anno);
@@ -189,6 +204,8 @@ export default class AnnotationStore {
             let parentId = this.getAnnotationParentId(anno);
             if (parentId) {
                 this.assignChildById(parentId);
+            } else {
+                this.nrOrphans++;
             }
         }
 
@@ -217,10 +234,10 @@ export default class AnnotationStore {
                             return bod.purpose == parentPurpose && bod.value == anno.id
                         }
                     );
-                    console.log(`Index: ${indexToRemove}`);
                     if (indexToRemove != -1) {
                         console.log(`Removing parent ref with index ${indexToRemove}`);
                         existingAnno.body.splice(indexToRemove, 1);
+                        this.nrOrphans++;
                     }
                 }
             }
@@ -229,6 +246,8 @@ export default class AnnotationStore {
             let parentBody = anno.body.find(bod => bod.purpose == parentPurpose);
             if (parentBody) {
                 this.freeParents.push(parentBody.value);
+            } else {
+                this.nrOrphans--;
             }
         }
 
@@ -243,5 +262,9 @@ export default class AnnotationStore {
         let foundIndex = this.annotations.findIndex(ann => ann.id == anno.id);
         this.annotations.splice(foundIndex, 1, anno);
         this.refreshFreeParents();
+        let annoClass = this.getAnnotationClass(anno);
+        if (this.parentTypes.indexOf(annoClass) == -1) {
+            this.refreshOrphans();
+        }
     }
 }

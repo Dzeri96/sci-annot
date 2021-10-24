@@ -35,7 +35,8 @@ export default class ImageView extends Vue {
             maxZoomLevel: 10,
             showZoomControl: false,
             showFullPageControl: false,
-            showHomeControl: false
+            showHomeControl: false,
+            navigatorSizeRatio: 0.15
         });
 
         let figCapWidget = new FigCapWidget(this.annotationStore);

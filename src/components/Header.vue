@@ -1,18 +1,19 @@
 <template>
     <span class="header-container">
-        <span class="left-header">
-            <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> TUT </button>
-        </span>
+        <div class="left-header">
+            <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> Instructions </button>
+            <span style="opacity: 60%">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
+        </div>
         <div class="right-header">
-           <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}} {{isTutorialVisible}}</span>
+            <span v-if="annotationsEmpty()">Nothing found<input type="checkbox" v-model="acceptEmpty"/></span>
+            <span v-if="orphansOrChildless()">Elements with no parent/child<input type="checkbox" v-model="acceptOrphans"/></span>
             <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
                 <input type="hidden" name="assignmentId" :value="assignmentId">
                 <input type="hidden" name="appVersion" :value="appVersion"/>
                 <input type="hidden" name="secondCounter" :value="counter"/>
                 <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
-                <input type="submit" id="submitButton" value="Submit"/>
+                <input type="submit" id="submitButton" value="Submit" :disabled="!submitEnabled()"/>
             </form>
-            <button id="submitButton" @click="submit">Test</button>
         </div>
     </span>
 </template>
@@ -36,6 +37,9 @@ export default class AppHeader extends Vue {
     private assignmentId = 'NO_ID';
     // Placeholder value for the MTurk submit link
     private turkSubmitTo = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
+
+    private acceptEmpty: boolean;
+    private acceptOrphans: boolean;
 
     private submit() {
         let result = {
@@ -63,6 +67,18 @@ export default class AppHeader extends Vue {
         let submitParam = this.urlParams.get('turkSubmitTo');
         if (submitParam) this.turkSubmitTo = submitParam;
     }
+
+    annotationsEmpty() {
+        return this.annotationStore.annotations.length == 0;
+    }
+
+    orphansOrChildless() {
+        return this.annotationStore.nrOrphans != 0 || this.annotationStore.freeParents.length != 0;
+    }
+
+    submitEnabled() {
+        return (!this.annotationsEmpty() || this.acceptEmpty) && (!this.orphansOrChildless() || this.acceptOrphans);
+    }
 }
 
 </script>
@@ -70,21 +86,32 @@ export default class AppHeader extends Vue {
 <style scoped>
     .header-container {
         display: flex;
-        padding: 0px 4px 4px 4px;
         margin: 0;
-        padding: 4px;
         border: white;
         border-style: solid;
         border-width: 2px 0px 2px 0px;
+        height: 2em;
+        padding: 0 4px 0 0;
     }
 
     .left-header {
         flex-grow: 1;
     }
 
-    .right-header * {
+    .header-container * {
         display: inline-block;
         margin-left: 4px;
+        height: 100%;
+        vertical-align: center;
+    }
+
+    .right-header {
+        justify-content: center;
+        vertical-align: center;
+    }
+
+    input[type=checkbox] {
+        height: auto;
     }
 
 </style>
