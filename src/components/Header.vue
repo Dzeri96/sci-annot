@@ -98,7 +98,7 @@ export default class AppHeader extends Vue {
         flex-grow: 1;
     }
 
-    .header-container * {
+    .header-container div * {
         display: inline-block;
         margin-left: 4px;
         height: 100%;
