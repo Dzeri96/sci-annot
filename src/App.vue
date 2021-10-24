@@ -89,7 +89,7 @@ button:hover {
 }
 
 button:active,
-.button-selected {
+button.selected {
   background-color: rgb(229, 229, 229);
 }
 

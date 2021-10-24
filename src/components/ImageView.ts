@@ -12,15 +12,20 @@ import AnnotationStore from '@/services/annotationStore';
     }
 })
 export default class ImageView extends Vue {
-    annotationStore!: AnnotationStore;
+    private annotationStore!: AnnotationStore;
     private anno;
+    private imLoaded = false;
 
     mounted() {
+
         let viewer = OpenSeadragon({
             id: 'imview',
             tileSources: {
                 type: 'image',
-                url: 'https://upload.wikimedia.org/wikipedia/commons/1/10/Empire_State_Building_%28aerial_view%29.jpg',
+                url: 'https://upload.wikimedia.org/wikipedia/commons/d/da/The_City_London.jpg',
+                success: () => {
+                    this.imLoaded = true;
+                }
             },
             showNavigator: true,
             zoomPerSecond: 0,

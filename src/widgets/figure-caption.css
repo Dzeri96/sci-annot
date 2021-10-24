@@ -5,16 +5,9 @@
 }
 
 .fig-cap-widget button {
-    /* outline: none;
-    border: none; */
     display: inline-block;
-    cursor: pointer;
-    opacity: 0.5;
     margin: 4px;
-}
-
-.fig-cap-widget button.selected, .fig-cap-widget button:hover {
-    opacity: 1;
+    z-index: 1;
 }
 
 #annotation-overlay {

@@ -1,7 +1,7 @@
 <template>
     <span class="header-container">
         <span class="left-header">
-            <button @click="this.$emit('toggle-tutorial')" :class="{'button-selected': isTutorialVisible}"> TUT </button>
+            <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> TUT </button>
         </span>
         <div class="right-header">
            <span v-if="annotationStore">Len: {{annotationStore.freeParents.length}} {{isTutorialVisible}}</span>
