@@ -28,7 +28,7 @@ export default class ImageView extends Vue {
             id: 'imview',
             tileSources: {
                 type: 'image',
-                url: 'http://localhost:5000/c76-4.png',
+                url: 'http://localhost:5000/poppler-09.png',
                 success: () => {
                     this.imLoaded = true;
                 }
@@ -39,6 +39,7 @@ export default class ImageView extends Vue {
             animationTime: 0,
             navigatorPosition: 'BOTTOM_RIGHT',
             maxZoomLevel: 10,
+            minZoomImageRatio: 0.5,
             showZoomControl: false,
             showFullPageControl: false,
             showHomeControl: false,

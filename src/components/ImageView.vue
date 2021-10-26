@@ -17,7 +17,7 @@
 #imview {
   height: 100%;
   flex-grow: 3;
-  background-color: rgba(212, 212, 212, 0.345);
+  background-color: rgba(212, 212, 212, 0.245);
   background-image: linear-gradient(
       rgba(255, 255, 255, 0.5) 2px,
       transparent 2px

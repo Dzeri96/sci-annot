@@ -41,6 +41,11 @@ export default class App extends Vue {
     font-family: 'Lato', sans-serif;
 }
 
+html {
+  max-height: 100vh;
+  box-sizing: border-box;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -49,19 +54,20 @@ export default class App extends Vue {
   color: #2c3e50;
 }
 
-main {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  transition: all 2s;
-}
-
 body {
   height: 100vh;
   max-height: 100vh;
   margin: 0px;
   display: flex;
   flex-flow: column;
+}
+
+main {
+  display: flex;
+  transition: all 2s;
+  flex-grow: 1;
+  box-sizing: border-box;
+  min-height: 0;
 }
 
 .collapse {
