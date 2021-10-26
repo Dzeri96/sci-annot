@@ -38,8 +38,8 @@ export default class AppHeader extends Vue {
     // Placeholder value for the MTurk submit link
     private turkSubmitTo = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
 
-    private acceptEmpty: boolean;
-    private acceptOrphans: boolean;
+    private acceptEmpty: boolean = false;
+    private acceptOrphans: boolean = false;
 
     private submit() {
         let result = {

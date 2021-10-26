@@ -1,5 +1,5 @@
 <template>
-  <div id="imview">
+  <div id="imview" :class="{pointer: pointerActive}">
     <div class="loader-box" v-if="!imLoaded">
       <div class="loader"></div>
       <div class="loader-text"><b>Loading...</b></div>
@@ -26,6 +26,11 @@
   background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
   background-position: -2px -20px, -2px -2px, -1px -1px, -1px -1px;
   justify-content: center;
+  cursor: move;
+}
+
+#imview.pointer {
+    cursor: crosshair !important;
 }
 
 .loader-box {

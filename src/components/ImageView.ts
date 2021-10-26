@@ -15,6 +15,7 @@ export default class ImageView extends Vue {
     private annotationStore!: AnnotationStore;
     private anno;
     private imLoaded = false;
+    private pointerActive = false;
 
     mounted() {
 
@@ -22,7 +23,7 @@ export default class ImageView extends Vue {
             id: 'imview',
             tileSources: {
                 type: 'image',
-                url: 'https://upload.wikimedia.org/wikipedia/commons/d/da/The_City_London.jpg',
+                url: 'http://localhost:5000/c76-4.png',
                 success: () => {
                     this.imLoaded = true;
                 }
@@ -66,6 +67,20 @@ export default class ImageView extends Vue {
             this.annotationStore.updateAnnotation(annot);
             this.reRenderAnnotations();
         });
+
+        document.addEventListener('keydown', (event: KeyboardEvent) => {
+            if(event.key == 'Shift') {
+                this.pointerActive = true;
+            }
+        }) 
+
+        document.addEventListener('keyup', (event: KeyboardEvent) => {
+            console.log(event)
+            if(event.key == 'Shift') {
+                console.log('Huh?')
+                this.pointerActive = false;
+            }
+        })
     }
 
     /**

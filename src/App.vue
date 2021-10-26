@@ -86,7 +86,7 @@ input[type="submit"] {
 
 button:enabled,
 input[type=submit]:enabled {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 
 button:hover,
