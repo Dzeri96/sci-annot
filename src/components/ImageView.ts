@@ -16,8 +16,13 @@ export default class ImageView extends Vue {
     private anno;
     private imLoaded = false;
     private pointerActive = false;
+    // Used to update crosshair guide locations
+    private hLineY = 50;
+    private vLineX = 50;
+    private imView;
 
     mounted() {
+        this.imView = this.$refs.imview;
 
         let viewer = OpenSeadragon({
             id: 'imview',
@@ -71,14 +76,14 @@ export default class ImageView extends Vue {
         document.addEventListener('keydown', (event: KeyboardEvent) => {
             if(event.key == 'Shift') {
                 this.pointerActive = true;
+                document.addEventListener('mousemove', this.updateGuideLocation);
             }
         }) 
 
         document.addEventListener('keyup', (event: KeyboardEvent) => {
-            console.log(event)
             if(event.key == 'Shift') {
-                console.log('Huh?')
                 this.pointerActive = false;
+                document.removeEventListener('mousemove', this.updateGuideLocation);
             }
         })
     }
@@ -88,5 +93,12 @@ export default class ImageView extends Vue {
      */
     reRenderAnnotations() {
         this.anno.setAnnotations(this.anno.getAnnotations());
+    }
+
+    private updateGuideLocation(e) {
+        // @ts-ignore
+        var rect = this.imView.getBoundingClientRect();
+        this.vLineX = Math.max(e.clientX-2 - rect.left, 0);
+        this.hLineY = Math.max(e.clientY-2 - rect.top, 0);
     }
 }

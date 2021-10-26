@@ -1,7 +1,7 @@
 <svg width="400" height="110">
     <defs>
         <filter x="0" y="0" width="1" height="1" id="solid">
-            <feFlood flood-color="black" flood-opacity="0.5" result="bg" />
+            <feFlood flood-color="black" flood-opacity="0.7" result="bg" />
             <feMerge>
                 <feMergeNode in="bg" />
                 <feMergeNode in="SourceGraphic" />

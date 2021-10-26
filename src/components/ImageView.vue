@@ -1,9 +1,11 @@
 <template>
-  <div id="imview" :class="{pointer: pointerActive}">
+  <div id="imview" ref="imview" :class="{ pointer: pointerActive }">
     <div class="loader-box" v-if="!imLoaded">
       <div class="loader"></div>
       <div class="loader-text"><b>Loading...</b></div>
     </div>
+    <div v-show="pointerActive" id="vertical-line" :style="{'left':vLineX+'px'}"></div>
+    <div v-show="pointerActive" id="horizontal-line" :style="{'top':hLineY+'px'}"></div>
   </div>
 </template>
 
@@ -30,7 +32,7 @@
 }
 
 #imview.pointer {
-    cursor: crosshair !important;
+  cursor: crosshair !important;
 }
 
 .loader-box {
@@ -55,6 +57,29 @@
   width: 7em;
   height: 7em;
   animation: spin 1s linear infinite;
+}
+
+
+#vertical-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  border-left: 2px dotted #000;
+  opacity: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+#horizontal-line {
+  position: absolute;
+  height: 1px;
+  left: 0;
+  right: 0;
+  border-top: 2px dotted #000;
+  opacity: 50%;
+  pointer-events: none;
+  z-index: 1;
 }
 
 @keyframes spin {
