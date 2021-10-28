@@ -93,6 +93,7 @@ export default class FigCapWidget {
 
         if (currentClass == 'Caption') {
             let parentSelectionContainer = document.createElement('div');
+            parentSelectionContainer.className = "parent-selection-container";
             
             let parentSelectionTextBox = document.createElement('span');
             let referencesLabel = document.createElement('span');

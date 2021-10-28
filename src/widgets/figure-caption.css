@@ -1,6 +1,6 @@
 .fig-cap-widget {
     padding: 4px;
-    overflow-x: scroll;
+    overflow-x: auto;
     white-space: nowrap;
 }
 
@@ -43,4 +43,12 @@ svg.a9s-annotationlayer .a9s-annotation.Figure .a9s-inner, svg.a9s-annotationlay
 
 .r6o-editor {
     z-index: 3;
+}
+
+.parent-selection-container {
+    border-top: 1px dashed lightgray;
+}
+
+.r6o-footer {
+    border-top: 1px solid lightgray;
 }
