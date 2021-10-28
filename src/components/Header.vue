@@ -5,17 +5,23 @@
             <span style="opacity: 60%">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
         </span>
         <span class="right-header">
-            <span v-if="annotationsEmpty()">Nothing found<input type="checkbox" v-model="acceptEmpty"/></span>
-            <span v-if="orphansOrChildless()">Elements with no parent/child<input type="checkbox" v-model="acceptOrphans"/></span>
+            <span v-if="annotationsEmpty()" style="vertical-align: middle">
+                <span>Nothing found</span>
+                <input type="checkbox" v-model="acceptEmpty"/>
+            </span>
+            <span v-if="orphansOrChildless()">
+                <span>Elements with no parent/child</span>
+                <input type="checkbox" v-model="acceptOrphans"/>
+            </span>
             <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
                 <input type="hidden" name="assignmentId" :value="assignmentId">
                 <input type="hidden" name="appVersion" :value="appVersion"/>
                 <input type="hidden" name="secondCounter" :value="counter"/>
                 <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
-                <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()"/>
+                <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()" class="r6o-btn"/>
             </form>
             <!-- Icon made by https://www.flaticon.com/authors/muhammad-ali -->
-            <button id="feedbackButton" title="Submit with feedback" :disabled="!submitEnabled()" @click="showModal = true">
+            <button id="feedbackButton" title="Submit with feedback" :disabled="!submitEnabled()" @click="showModal = true" class="r6o-btn">
                 <img src="../assets/feedback.png" alt="Feedback"/>
             </button>
             <transition name="modal">
@@ -138,14 +144,16 @@ export default class AppHeader extends Vue {
         margin: 0;
         padding: 0;
         height: 80%;
+        filter: brightness(0) invert(1);
     }
 
     #feedbackButton {
         border-left: hidden;
-        padding-left: 0;
+        padding: 0 2px 2px 0;
         margin-left: 0;
         border-radius: 0 5px 5px 0;
         height: 100%;
+        min-width: 0;
     }
 
     #submitButton {

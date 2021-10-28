@@ -77,7 +77,7 @@ main {
 
 /* CSS */
 button,
-input[type="submit"] {
+input[type="submit"]:not(.r6o-btn) {
   background-color: #FFFFFF;
   border: 1px solid rgb(209,213,219);
   border-radius: 5px;
@@ -100,25 +100,29 @@ button:disabled img{
   opacity: 50%;
 }
 
-button:hover:enabled,
-input:hover[type=submit]:enabled {
+button:hover:enabled:not(.r6o-btn),
+input:hover[type=submit]:enabled:not(.r6o-btn) {
   background-color: rgb(245, 245, 245);
 }
 
-button:active:enabled,
+button:active:enabled:not(.r6o-btn),
 button.selected:enabled,
-input:active[type=submit]:enabled {
+input:active[type=submit]:enabled:not(.r6o-btn) {
   background-color: rgb(229, 229, 229);
 }
 
-button:focus:enabled,
-input:focus[type=submit]:enabled {
+button:focus:enabled:not(.r6o-btn),
+input:focus[type=submit]:enabled:not(.r6o-btn) {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
-button:focus-visible,
-input:focus-visible[type=submit] {
+button:focus-visible:not(.r6o-btn),
+input:focus-visible[type=submit]:not(.r6o-btn) {
   box-shadow: none;
+}
+
+.r6o-btn:active {
+  background-color: #32608e;
 }
 </style>
