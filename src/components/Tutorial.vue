@@ -2,54 +2,67 @@
   <div class="tut-body">
 		<div class="tut-content">
 			<h2>Instructions:</h2>
-			<ul>
-				<li>
-					Draw bounding boxes around scientific figures. Treat all sub-figures as one figure.
-					If unsure, look at the number of captions under the figure.
-				</li>
-			</ul>
-			<video autoplay loop inline>
-				<source src="../assets/figure_selection.webm" type="video/webm"/>
-			</video>
-			<ul>
-				<li>
-					Logos and other decorative images are not counted as scientific figures
-				</li>
-			</ul>
-			<img src="../assets/bad_example_logos.webp"/>
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Draw bounding boxes around scientific figures. Treat all sub-figures as one figure.
+						If unsure, look at the number of captions under the figure.
+					</li>
+				</ul>
+				<video autoplay loop inline>
+					<source src="../assets/figure_selection.webm" type="video/webm"/>
+				</video>
+			</div>
+			
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Logos and other decorative images are not counted as scientific figures
+					</li>
+				</ul>
+				<img src="../assets/bad_example_logos.webp"/>
+			</div>
 
-			<ul>
-				<li>
-					Draw bounding boxes around tables.
-				</li>
-			</ul>
-			<video autoplay loop inline>
-					<source src="../assets/table_selection.webm" type="video/webm"/>
-			</video>
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Draw bounding boxes around tables.
+					</li>
+				</ul>
+				<video autoplay loop inline>
+						<source src="../assets/table_selection.webm" type="video/webm"/>
+				</video>
+			</div>
 
-			<ul>
-				<li>
-					Draw bounding boxes around captions and select elements that they refer to.
-				</li>
-			</ul>
-			<video autoplay loop inline>
-					<source src="../assets/caption_selection.webm" type="video/webm"/>
-			</video>
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Draw bounding boxes around captions and select elements that they refer to.
+					</li>
+				</ul>
+				<video autoplay loop inline>
+						<source src="../assets/caption_selection.webm" type="video/webm"/>
+				</video>
+			</div>
 
-			<ul>
-				<li>
-					It can happen that a page contains a figure or table without a caption and vice versa.
-					In such a case you will see <i style="color: #D88C9A">Parentless</i> or <i style="color: #D88C9A">Childless</i> in the bounding box.
-					If you are really sure you have selected everything correctly, check <b>Elements with no parent/child</b> next to the submit button.
-				</li>
-			</ul>
+			<div class="tut-unit">
+				<ul>
+					<li>
+						It can happen that a page contains a figure or table without a caption and vice versa.
+						In such a case you will see <i style="color: #D88C9A">Parentless</i> or <i style="color: #D88C9A">Childless</i> in the bounding box.
+						If you are really sure you have selected everything correctly, check <b>Elements with no parent/child</b> next to the submit button.
+					</li>
+				</ul>
+			</div>
 
-			<ul>
-				<li>
-					If you wish to submit feedback together with your HIT results, click the button on the top right.
-					We appreciate any improvement suggestions!
-				</li>
-			</ul>
+			<div class="tut-unit">
+				<ul>
+					<li>
+						If you wish to submit feedback together with your HIT results, click the button on the top right.
+						We appreciate any improvement suggestions!
+					</li>
+				</ul>
+			</div>
 		</div>
   </div>
 </template>
@@ -93,5 +106,10 @@ export default class ModalTutorial extends Vue {
 
 	video, img {
 		width: 100%;
+	}
+
+	.tut-unit {
+		width: 100%;
+		margin-bottom: 52px;
 	}
 </style>
