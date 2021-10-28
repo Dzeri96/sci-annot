@@ -154,12 +154,14 @@ export default class AppHeader extends Vue {
         border-radius: 0 5px 5px 0;
         height: 100%;
         min-width: 0;
+        border-left: 1px solid rgb(110, 171, 233)
     }
 
     #submitButton {
         border-radius: 5px 0 0 5px;
         height: 100%;
         vertical-align: top;
+        
     }
 
     form {
