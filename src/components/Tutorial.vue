@@ -9,7 +9,7 @@
 						If unsure, look at the number of captions under the figure.
 					</li>
 				</ul>
-				<video autoplay loop inline>
+				<video autoplay loop inline muted>
 					<source src="../assets/figure_selection.webm" type="video/webm"/>
 				</video>
 			</div>
@@ -29,7 +29,7 @@
 						Draw bounding boxes around tables.
 					</li>
 				</ul>
-				<video autoplay loop inline>
+				<video autoplay loop inline muted>
 						<source src="../assets/table_selection.webm" type="video/webm"/>
 				</video>
 			</div>
@@ -40,7 +40,7 @@
 						Draw bounding boxes around captions and select elements that they refer to.
 					</li>
 				</ul>
-				<video autoplay loop inline>
+				<video autoplay loop inline muted>
 						<source src="../assets/caption_selection.webm" type="video/webm"/>
 				</video>
 			</div>

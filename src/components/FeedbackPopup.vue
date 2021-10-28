@@ -89,7 +89,7 @@ export default class FeedbackPopup extends Vue {
 
 .modal-footer {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   padding: 8px 0;
 }
 
