@@ -43,6 +43,13 @@
 					If you are really sure you have selected everything correctly, check <b>Elements with no parent/child</b> next to the submit button.
 				</li>
 			</ul>
+
+			<ul>
+				<li>
+					If you wish to submit feedback together with your HIT results, click the button on the top right.
+					We appreciate any improvement suggestions!
+				</li>
+			</ul>
 		</div>
   </div>
 </template>

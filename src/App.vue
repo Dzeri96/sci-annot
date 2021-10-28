@@ -39,6 +39,7 @@ export default class App extends Vue {
 <style>
 * {
     font-family: 'Lato', sans-serif;
+    box-sizing: border-box;
 }
 
 html {
@@ -95,18 +96,22 @@ input[type=submit]:enabled {
   cursor: pointer !important;
 }
 
-button:hover,
+button:disabled img{
+  opacity: 50%;
+}
+
+button:hover:enabled,
 input:hover[type=submit]:enabled {
   background-color: rgb(245, 245, 245);
 }
 
-button:active,
-button.selected,
+button:active:enabled,
+button.selected:enabled,
 input:active[type=submit]:enabled {
   background-color: rgb(229, 229, 229);
 }
 
-button:focus,
+button:focus:enabled,
 input:focus[type=submit]:enabled {
   outline: 2px solid transparent;
   outline-offset: 2px;

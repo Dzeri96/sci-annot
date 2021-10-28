@@ -40,3 +40,7 @@ svg.a9s-annotationlayer .a9s-annotation.Figure .a9s-inner, svg.a9s-annotationlay
 .a9s-annotation rect {
     vector-effect: none;
 }
+
+.r6o-editor {
+    z-index: 3;
+}

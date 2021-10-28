@@ -46,6 +46,10 @@ export default class ImageView extends Vue {
             navigatorSizeRatio: 0.15
         });
 
+        viewer.addHandler('open-failed', () => {
+            this.imLoaded = true;
+        })
+
         let figCapWidget = new FigCapWidget(this.annotationStore);
         let figCapWidgetFunc = figCapWidget.figCapWidget;
 

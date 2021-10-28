@@ -1,10 +1,10 @@
 <template>
     <span class="header-container">
-        <div class="left-header">
+        <span class="left-header">
             <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> Instructions </button>
             <span style="opacity: 60%">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
-        </div>
-        <div class="right-header">
+        </span>
+        <span class="right-header">
             <span v-if="annotationsEmpty()">Nothing found<input type="checkbox" v-model="acceptEmpty"/></span>
             <span v-if="orphansOrChildless()">Elements with no parent/child<input type="checkbox" v-model="acceptOrphans"/></span>
             <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
@@ -12,17 +12,31 @@
                 <input type="hidden" name="appVersion" :value="appVersion"/>
                 <input type="hidden" name="secondCounter" :value="counter"/>
                 <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
-                <input type="submit" id="submitButton" value="Submit" :disabled="!submitEnabled()"/>
+                <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()"/>
             </form>
-        </div>
+            <!-- Icon made by https://www.flaticon.com/authors/muhammad-ali -->
+            <button id="feedbackButton" title="Submit with feedback" :disabled="!submitEnabled()" @click="showModal = true">
+                <img src="../assets/feedback.png" alt="Feedback"/>
+            </button>
+            <transition name="modal">
+                <feedback-popup v-if="showModal" @close="showModal=false" @submit="submitForm()">
+                </feedback-popup>
+            </transition>
+        </span>
     </span>
 </template>
 
 <script lang="ts">
 import AnnotationStore from '@/services/annotationStore';
-import { Vue } from "vue-class-component";
+import FeedbackPopup from './FeedbackPopup.vue';
+import { Options, Vue } from "vue-class-component";
 import { Prop } from 'vue-property-decorator';
 
+@Options({
+    components: {
+        FeedbackPopup
+    }
+})
 export default class AppHeader extends Vue {
     @Prop()
     private annotationStore: AnnotationStore;
@@ -37,9 +51,11 @@ export default class AppHeader extends Vue {
     private assignmentId = 'NO_ID';
     // Placeholder value for the MTurk submit link
     private turkSubmitTo = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
+    
 
     private acceptEmpty: boolean = false;
     private acceptOrphans: boolean = false;
+    private showModal = false;
 
     private submit() {
         let result = {
@@ -79,6 +95,11 @@ export default class AppHeader extends Vue {
     submitEnabled() {
         return (!this.annotationsEmpty() || this.acceptEmpty) && (!this.orphansOrChildless() || this.acceptOrphans);
     }
+
+    submitForm() {
+        //
+        (this.$refs.submitButton as any).click();
+    }
 }
 
 </script>
@@ -98,20 +119,43 @@ export default class AppHeader extends Vue {
         flex-grow: 1;
     }
 
-    .header-container div * {
+    .header-container span * {
         display: inline-block;
         margin-left: 4px;
-        height: 100%;
-        vertical-align: center;
+        vertical-align: middle;
     }
 
     .right-header {
-        justify-content: center;
-        vertical-align: center;
+        vertical-align: middle;
+        height: 100%;
     }
 
-    input[type=checkbox] {
+    input[type=checkbox]{
         height: auto;
+    }
+
+    img {
+        margin: 0;
+        padding: 0;
+        height: 80%;
+    }
+
+    #feedbackButton {
+        border-left: hidden;
+        padding-left: 0;
+        margin-left: 0;
+        border-radius: 0 5px 5px 0;
+        height: 100%;
+    }
+
+    #submitButton {
+        border-radius: 5px 0 0 5px;
+        height: 100%;
+        vertical-align: top;
+    }
+
+    form {
+        height: 100%;
     }
 
 </style>
