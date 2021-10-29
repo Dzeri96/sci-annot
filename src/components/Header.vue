@@ -54,7 +54,7 @@ export default class AppHeader extends Vue {
     // Injected from package.json
     private appVersion = process.env.VUE_APP_VERSION;
     // Placeholder value for the MTurk assignment id
-    private assignmentId = 'NO_ID';
+    private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
     // Placeholder value for the MTurk submit link
     private turkSubmitTo = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
     
@@ -99,11 +99,12 @@ export default class AppHeader extends Vue {
     }
 
     submitEnabled() {
-        return (!this.annotationsEmpty() || this.acceptEmpty) && (!this.orphansOrChildless() || this.acceptOrphans);
+        return this.assignmentId != 'ASSIGNMENT_ID_NOT_AVAILABLE'
+        && (!this.annotationsEmpty() || this.acceptEmpty)
+        && (!this.orphansOrChildless() || this.acceptOrphans);
     }
 
     submitForm() {
-        //
         (this.$refs.submitButton as any).click();
     }
 }
@@ -160,8 +161,7 @@ export default class AppHeader extends Vue {
     #submitButton {
         border-radius: 5px 0 0 5px;
         height: 100%;
-        vertical-align: top;
-        
+        vertical-align: top;   
     }
 
     form {

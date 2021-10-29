@@ -1,7 +1,7 @@
 <template>
   <header><app-header @toggle-tutorial="toggleTutorial" :annotationStore="store" :isTutorialVisible="isTutorialVisible"/></header>
     <main>
-      <tutorial :class="{collapse: !isTutorialVisible}"/>
+      <tutorial :class="{collapse: !isTutorialVisible}" id="tutorial"/>
       <image-view :annotation-store="store"/>
     </main>
     <footer></footer>
@@ -9,7 +9,6 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import HelloWorld from './components/HelloWorld.vue';
 import ImageView from './components/ImageView.vue';
 import Tutorial from './components/Tutorial.vue';
 import AppHeader from './components/Header.vue'
@@ -18,7 +17,6 @@ import { reactive } from 'vue';
 
 @Options({
   components: {
-    HelloWorld,
     ImageView,
     AppHeader,
     Tutorial
@@ -122,7 +120,11 @@ input:focus-visible[type=submit]:not(.r6o-btn) {
   box-shadow: none;
 }
 
-.r6o-btn:active {
+.r6o-btn:active:not(.outline) {
   background-color: #32608e;
+}
+
+.r6o-btn:disabled {
+  cursor: default !important;
 }
 </style>

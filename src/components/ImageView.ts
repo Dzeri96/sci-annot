@@ -1,5 +1,6 @@
 let OpenSeadragon = require('openseadragon');
 let Annotorious = require('@recogito/annotorious-openseadragon');
+let placeholderPic = require('../assets/96d834586a304382bd623f81b83e3b62-09.png');
 import '@recogito/annotorious-openseadragon/dist/annotorious.min.css';
 import FigCapWidget from '../widgets/figure-caption';
 import { Options, Vue } from "vue-class-component";
@@ -20,15 +21,17 @@ export default class ImageView extends Vue {
     private hLineY = 50;
     private vLineX = 50;
     private imView;
+    private urlParams = new URLSearchParams(window.location.search);
 
     mounted() {
         this.imView = this.$refs.imview;
 
+        let imageUrl = this.urlParams.get('image') ?? placeholderPic;
         let viewer = OpenSeadragon({
             id: 'imview',
             tileSources: {
                 type: 'image',
-                url: 'http://localhost:5000/poppler-09.png',
+                url: imageUrl,
                 success: () => {
                     this.imLoaded = true;
                 }
