@@ -1,4 +1,5 @@
 # sci-annot
+An MTurk-compatible annotation tool for annotating figures, tables and captions in scientific publications.
 
 ## Project setup
 ```

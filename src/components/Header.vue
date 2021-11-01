@@ -87,7 +87,9 @@ export default class AppHeader extends Vue {
 
         // Get submit link from URL params
         let submitParam = this.urlParams.get('turkSubmitTo');
-        if (submitParam) this.turkSubmitTo = submitParam;
+        if (submitParam) {
+            this.turkSubmitTo = submitParam + '/mturk/externalSubmit';
+        }
     }
 
     annotationsEmpty() {
