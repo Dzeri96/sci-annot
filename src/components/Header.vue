@@ -48,6 +48,8 @@ export default class AppHeader extends Vue {
     private annotationStore: AnnotationStore;
     @Prop()
     private isTutorialVisible: boolean;
+    @Prop()
+    private isImageLoaded: boolean;
 
     private counter = 0;
     private urlParams = new URLSearchParams(window.location.search);
@@ -102,6 +104,7 @@ export default class AppHeader extends Vue {
 
     submitEnabled() {
         return this.assignmentId != 'ASSIGNMENT_ID_NOT_AVAILABLE'
+        && this.isImageLoaded
         && (!this.annotationsEmpty() || this.acceptEmpty)
         && (!this.orphansOrChildless() || this.acceptOrphans);
     }

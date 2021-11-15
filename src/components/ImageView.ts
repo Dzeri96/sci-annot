@@ -34,6 +34,7 @@ export default class ImageView extends Vue {
                 url: imageUrl,
                 success: () => {
                     this.imLoaded = true;
+                    this.$emit('image-loaded');
                 }
             },
             showNavigator: true,

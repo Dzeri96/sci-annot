@@ -1,10 +1,17 @@
 <template>
-  <header><app-header @toggle-tutorial="toggleTutorial" :annotationStore="store" :isTutorialVisible="isTutorialVisible"/></header>
-    <main>
-      <tutorial :class="{collapse: !isTutorialVisible}" id="tutorial"/>
-      <image-view :annotation-store="store"/>
-    </main>
-    <footer></footer>
+  <header>
+    <app-header 
+      @toggle-tutorial="toggleTutorial" 
+      :annotationStore="store" 
+      :isTutorialVisible="isTutorialVisible" 
+      :isImageLoaded="isImageLoaded"
+    />
+  </header>
+  <main>
+    <tutorial :class="{collapse: !isTutorialVisible}" id="tutorial"/>
+    <image-view :annotation-store="store" @image-loaded="imageLoaded"/>
+  </main>
+  <footer></footer>
 </template>
 
 <script lang="ts">
@@ -24,12 +31,17 @@ import { reactive } from 'vue';
 })
 export default class App extends Vue {
   isTutorialVisible: boolean = false;
+  isImageLoaded: boolean = false;
   reactiveAnnos: Annotation[] = reactive([]);
   reactiveParents: string[] = reactive([]);
   store = new AnnotationStore(['Figure', 'Table'], ['Caption'], undefined, this.reactiveParents);
 
   toggleTutorial() {
     this.isTutorialVisible = !this.isTutorialVisible;
+  }
+
+  imageLoaded() {
+    this.isImageLoaded = true;
   }
 }
 </script>

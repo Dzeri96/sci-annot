@@ -66,7 +66,7 @@
   bottom: 0;
   width: 1px;
   border-left: 2px dotted #000;
-  opacity: 50%;
+  opacity: 0.5;
   pointer-events: none;
   z-index: 1;
 }
@@ -77,7 +77,7 @@
   left: 0;
   right: 0;
   border-top: 2px dotted #000;
-  opacity: 50%;
+  opacity: 0.5;
   pointer-events: none;
   z-index: 1;
 }
