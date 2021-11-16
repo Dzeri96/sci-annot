@@ -17,6 +17,8 @@
                 <input type="hidden" name="assignmentId" :value="assignmentId">
                 <input type="hidden" name="appVersion" :value="appVersion"/>
                 <input type="hidden" name="secondCounter" :value="counter"/>
+                <input type="hidden" name="canvasHeight" :value="annotationStore.canvasHeight"/>
+                <input type="hidden" name="canvasWidth" :value="annotationStore.canvasWidth"/>
                 <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
                 <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()" class="r6o-btn"/>
             </form>

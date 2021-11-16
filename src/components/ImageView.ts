@@ -32,8 +32,10 @@ export default class ImageView extends Vue {
             tileSources: {
                 type: 'image',
                 url: imageUrl,
-                success: () => {
+                success: (obj) => {
                     this.imLoaded = true;
+                    this.annotationStore.canvasHeight = obj.tileSource.height;
+                    this.annotationStore.canvasWidth = obj.tileSource.width;
                     this.$emit('image-loaded');
                 }
             },

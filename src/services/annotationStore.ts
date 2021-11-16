@@ -78,6 +78,8 @@ export default class AnnotationStore {
     private friendlyIdMap: TwoWayMap;
     private indexParentMap: Map<string, number>;
     public nrOrphans: number;
+    public canvasHeight: number;
+    public canvasWidth: number;
 
     constructor(
         public parentTypes: string[],
