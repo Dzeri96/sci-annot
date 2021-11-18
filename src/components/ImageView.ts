@@ -27,6 +27,7 @@ export default class ImageView extends Vue {
         this.imView = this.$refs.imview;
 
         let imageUrl = this.urlParams.get('image') ?? placeholderPic;
+        // Reference: https://openseadragon.github.io/docs/OpenSeadragon.html
         let viewer = OpenSeadragon({
             id: 'imview',
             tileSources: {
@@ -49,7 +50,10 @@ export default class ImageView extends Vue {
             showZoomControl: false,
             showFullPageControl: false,
             showHomeControl: false,
-            navigatorSizeRatio: 0.15
+            navigatorSizeRatio: 0.15,
+            gestureSettingsMouse: {
+                clickToZoom: false
+            }
         });
 
         viewer.addHandler('open-failed', () => {
