@@ -5,15 +5,18 @@ import '@recogito/annotorious-openseadragon/dist/annotorious.min.css';
 import FigCapWidget from '../widgets/figure-caption';
 import { Options, Vue } from "vue-class-component";
 import AnnotationStore from '@/services/annotationStore';
+import Answer from '../models/Answer'
 
 
 @Options({
     props: {
-        annotationStore: AnnotationStore
+        annotationStore: AnnotationStore,
+        answer: Answer
     }
 })
 export default class ImageView extends Vue {
     private annotationStore!: AnnotationStore;
+    private answer: Answer;
     private anno;
     private imLoaded = false;
     private pointerActive = false;
@@ -88,6 +91,13 @@ export default class ImageView extends Vue {
             this.reRenderAnnotations();
         });
 
+        if (this.answer) {
+            for (const annotation of this.answer.annotations) {
+                this.annotationStore.addAnnotation(annotation);
+            }
+            this.reRenderAnnotations();
+        }
+
         document.addEventListener('keydown', (event: KeyboardEvent) => {
             if(event.key == 'Shift') {
                 this.pointerActive = true;
@@ -107,7 +117,7 @@ export default class ImageView extends Vue {
      * Refresh the annotations shown on screen
      */
     reRenderAnnotations() {
-        this.anno.setAnnotations(this.anno.getAnnotations());
+        this.anno.setAnnotations(this.annotationStore.annotations);
     }
 
     private updateGuideLocation(e) {

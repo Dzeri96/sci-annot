@@ -15,19 +15,19 @@
 }
 
 svg.a9s-annotationlayer .a9s-annotation.Figure .a9s-outer {
-    stroke: rgba(142, 125, 190, 0.9);;
+    stroke: rgba(142, 125, 190, 0.9);
     stroke-width: 3;
     fill: rgba(142, 125, 190, 0.2);
 }
 
 svg.a9s-annotationlayer .a9s-annotation.Table .a9s-outer {
-    stroke: rgba(191, 126, 137, 0.9);;
+    stroke: rgba(191, 126, 137, 0.9);
     stroke-width: 3;
     fill: rgba(191, 126, 137, 0.2);
 }
 
 svg.a9s-annotationlayer .a9s-annotation.Caption .a9s-outer {
-    stroke: rgba(104, 141, 189, 0.9);;
+    stroke: rgba(104, 141, 189, 0.9);
     stroke-width: 3;
     fill: rgba(104, 141, 189, 0.2);
 }

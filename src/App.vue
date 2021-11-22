@@ -1,15 +1,17 @@
 <template>
   <header>
-    <app-header 
+    <app-header
+      v-if="assignmentLoaded"
       @toggle-tutorial="toggleTutorial" 
       :annotationStore="store" 
       :isTutorialVisible="isTutorialVisible" 
       :isImageLoaded="isImageLoaded"
+      :assignment="assignment"
     />
   </header>
   <main>
-    <tutorial :class="{collapse: !isTutorialVisible}" id="tutorial"/>
-    <image-view :annotation-store="store" @image-loaded="imageLoaded"/>
+    <tutorial v-if="answer" :class="{collapse: !isTutorialVisible}" id="tutorial"/>
+    <image-view v-if="assignmentLoaded" :answer="answer" :annotation-store="store" @image-loaded="imageLoaded"/>
   </main>
   <footer></footer>
 </template>
@@ -21,6 +23,7 @@ import Tutorial from './components/Tutorial.vue';
 import AppHeader from './components/Header.vue'
 import AnnotationStore, { Annotation } from './services/annotationStore';
 import { reactive } from 'vue';
+import Answer from './models/Answer';
 
 @Options({
   components: {
@@ -35,6 +38,31 @@ export default class App extends Vue {
   reactiveAnnos: Annotation[] = reactive([]);
   reactiveParents: string[] = reactive([]);
   store = new AnnotationStore(['Figure', 'Table'], ['Caption'], undefined, this.reactiveParents);
+  private urlParams = new URLSearchParams(window.location.search);
+  assignmentLoaded: boolean = false;
+  answer = null;
+  assignment = null;
+
+  async beforeMount() {
+    let assignmentUrl = this.urlParams.get('assignmentUrl');
+    if (assignmentUrl) {
+      fetch(assignmentUrl)
+        .then(async response => {
+          let parsed = await response.json();
+          let fetchedAnswer = Object.assign(new Answer(), parsed.answer);
+          this.answer = fetchedAnswer;
+          this.assignment = parsed;
+        })
+        .catch(err => {
+          console.log(`Error fetching annotations: ${err}`)
+        })
+        .finally(() => {
+          this.assignmentLoaded = true;
+        })
+    } else {
+      this.assignmentLoaded = true;
+    }
+  }
 
   toggleTutorial() {
     this.isTutorialVisible = !this.isTutorialVisible;

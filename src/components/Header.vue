@@ -1,5 +1,5 @@
 <template>
-    <span class="header-container">
+    <span v-if="!assignment" class="header-container">
         <span class="left-header">
             <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> Instructions </button>
             <span style="opacity: 60%">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
@@ -32,6 +32,9 @@
             </transition>
         </span>
     </span>
+    <span v-else>
+        <b>ID:</b> {{assignment.assignment_id}} <b>AppVersion:</b> {{assignment.answer.appVersion}} <b>Time:</b> {{assignment.answer.secondCounter}}s
+    </span>
 </template>
 
 <script lang="ts">
@@ -52,6 +55,8 @@ export default class AppHeader extends Vue {
     private isTutorialVisible: boolean;
     @Prop()
     private isImageLoaded: boolean;
+    @Prop()
+    private assignment: any;
 
     private counter = 0;
     private urlParams = new URLSearchParams(window.location.search);
