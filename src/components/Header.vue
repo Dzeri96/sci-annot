@@ -2,7 +2,7 @@
     <span v-if="!assignment" class="header-container">
         <span class="left-header">
             <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> Instructions </button>
-            <span style="opacity: 60%">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
+            <span style="opacity: 60%; margin-left: 1em">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
         </span>
         <span class="right-header">
             <span v-if="annotationsEmpty()" style="vertical-align: middle">
@@ -174,6 +174,8 @@ export default class AppHeader extends Vue {
         border-radius: 5px 0 0 5px;
         height: 100%;
         vertical-align: top;   
+        -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.2); 
+        box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.2);
     }
 
     form {

@@ -23,11 +23,30 @@ export default class ImageView extends Vue {
     // Used to update crosshair guide locations
     private hLineY = 50;
     private vLineX = 50;
-    private imView;
+    private imView: Element;
     private urlParams = new URLSearchParams(window.location.search);
+    private widgetFocusObserver = new MutationObserver(this.focusWidget);
+
+    private handleEditorOpen = (mutationsList, observer) => {
+        if(mutationsList && mutationsList[0].addedNodes.length) {
+            let widget = document.getElementById('fig-cap-widget');
+            widget.focus();
+
+            let widgetFrame = document.getElementsByClassName('r6o-editor')[0];
+            // Creates a change listener on the widget to keep it in focus
+            this.widgetFocusObserver.observe(widgetFrame, {attributes: true, childList: false});
+        }
+    }
+
+    private focusWidget(mutationsList, observer) {
+        let widget = document.getElementById('fig-cap-widget');
+            widget.focus();
+    }
+
+    private widgetOpenObserver = new MutationObserver(this.handleEditorOpen);
 
     mounted() {
-        this.imView = this.$refs.imview;
+        this.imView = this.$refs.imview as Element;
 
         let imageUrl = this.urlParams.get('image') ?? placeholderPic;
         // Reference: https://openseadragon.github.io/docs/OpenSeadragon.html
@@ -74,7 +93,9 @@ export default class ImageView extends Vue {
         }
         this.anno = Annotorious(viewer, annoConfig);
         this.anno.setDrawingTool('rect');
-        this.anno.setVisible(true)
+        this.anno.setVisible(true);
+
+        this.widgetOpenObserver.observe(this.imView.childNodes[4], {attributes: false, childList: true});
 
         this.anno.on('createAnnotation', (annot) => {
             this.annotationStore.addAnnotation(annot);
@@ -102,6 +123,14 @@ export default class ImageView extends Vue {
             if(event.key == 'Shift') {
                 this.pointerActive = true;
                 document.addEventListener('mousemove', this.updateGuideLocation);
+            } else if (event.code == 'Space') {
+                let widgetFooterArray = document.getElementsByClassName('r6o-footer');
+                if (widgetFooterArray) {
+                    // The number of buttons changes - always get the last one
+                    let lastIndex = widgetFooterArray[0].childNodes.length - 1;
+                    let okButton = widgetFooterArray[0].childNodes[lastIndex] as HTMLButtonElement;
+                    okButton.click();
+                }
             }
         }) 
 

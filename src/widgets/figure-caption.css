@@ -52,3 +52,13 @@ svg.a9s-annotationlayer .a9s-annotation.Figure .a9s-inner, svg.a9s-annotationlay
 .r6o-footer {
     border-top: 1px solid lightgray;
 }
+
+.hotkey {
+    display: inline-flex;
+    padding: 0px 2px;
+    border-radius: 2px;
+    border: 1px solid lightgray;
+    min-width: 1.5em;
+    justify-content: center;
+    align-items: center;
+  }

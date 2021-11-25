@@ -56,6 +56,7 @@ export default class FigCapWidget {
             }
         }
 
+
         var createButton = function (label: string, tag: string, type: 'class' | 'parent') {
             var button = document.createElement('button');
             let current = type == 'class' ? currentClass : currentParent;
@@ -75,6 +76,11 @@ export default class FigCapWidget {
         var container = document.createElement('div');
         root.appendChild(container);
         container.className = 'fig-cap-widget';
+        container.id = 'fig-cap-widget';
+        // TODO: Find a workaround for capturing keyboard events:
+        // https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/tabindex
+        container.tabIndex = 1;
+        let allowedShortcutKeys = ['Digit1', 'Digit2', 'Digit3']
 
         // Disallow changing of annotation classes
         if(!currentClass || !friendlyName) {
@@ -91,6 +97,7 @@ export default class FigCapWidget {
             container.appendChild(classText);
         }
 
+        let container2 = document.createElement('div');
         if (currentClass == 'Caption') {
             let parentSelectionContainer = document.createElement('div');
             parentSelectionContainer.className = "parent-selection-container";
@@ -108,16 +115,11 @@ export default class FigCapWidget {
             parentSelectionTextBox.appendChild(currParentLabel);
 
             parentSelectionContainer.appendChild(parentSelectionTextBox);
-            let container2 = document.createElement('div');
             container2.id = 'container2'
             container2.className = 'fig-cap-widget';
             parentSelectionContainer.appendChild(container2);
             // Make a copy of the array
             let potentialParentIDs = [...this.annotationStore.getFreeParentIds()];
-            // Show the current parent button only on the child widget
-            /* if (currentParent && potentialParentIDs.indexOf(currentParent) == -1) {
-                potentialParentIDs.unshift(currentParent);
-            } */
             for (const potentialParentId of potentialParentIDs) {
                 let newButton = createButton(
                     this.annotationStore.getFriendlyName(potentialParentId),
@@ -128,8 +130,57 @@ export default class FigCapWidget {
 
             }
 
-            if(potentialParentIDs.length != 0) root.appendChild(parentSelectionContainer);
+            if(potentialParentIDs.length || currentParent){
+                root.appendChild(parentSelectionContainer);
+                allowedShortcutKeys = allowedShortcutKeys.concat(['KeyQ', 'KeyW', 'KeyE']);
+            } 
         }
+
+        // Handle shortcut keys
+        root.addEventListener('keydown', (evt) => {
+            let key = evt.code;
+
+            if(allowedShortcutKeys.indexOf(key) != -1) {
+                let focusedKey: HTMLButtonElement;
+                // Not used currently, see https://github.com/recogito/annotorious/issues/185
+                let finalSelection = false;
+
+                switch(key) {
+                    case 'Digit1':
+                        focusedKey = button1;
+                        finalSelection = !!container2.childNodes;
+                        break;
+                    case 'Digit2':
+                        focusedKey = button2;
+                        finalSelection = !container2.childNodes;
+                        break;
+                    case 'Digit3':
+                        focusedKey = button3;
+                        finalSelection = !container2.childNodes;
+                        break;
+                    case 'KeyQ':
+                        focusedKey = container2.childNodes[0] as HTMLButtonElement;
+                        finalSelection = true;
+                        break;
+                    case 'KeyW':
+                        focusedKey = container2.childNodes[1] as HTMLButtonElement;
+                        finalSelection = true;
+                        break;
+                    case 'KeyE':
+                        focusedKey = container2.childNodes[2] as HTMLButtonElement;
+                        finalSelection = true;
+                        break;
+                    default:
+                        console.log(`Error: Invalid shortcut caught ${key}`);
+                        break;
+                }
+
+                if (focusedKey) {
+                    focusedKey.click();
+                }
+            }
+            
+        });
 
         return root;
     }

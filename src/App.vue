@@ -10,7 +10,7 @@
     />
   </header>
   <main>
-    <tutorial v-if="answer" :class="{collapse: !isTutorialVisible}" id="tutorial"/>
+    <tutorial v-if="!answer" :class="{collapse: !isTutorialVisible}" id="tutorial"/>
     <image-view v-if="assignmentLoaded" :answer="answer" :annotation-store="store" @image-loaded="imageLoaded"/>
   </main>
   <footer></footer>
@@ -127,6 +127,8 @@ input[type="submit"]:not(.r6o-btn) {
   -webkit-user-select: none;
   touch-action: manipulation;
   font-size: 1em;
+  -webkit-box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.2); 
+  box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.2); 
 }
 
 button:enabled,
