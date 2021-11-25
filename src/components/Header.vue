@@ -2,7 +2,7 @@
     <span v-if="!assignment" class="header-container">
         <span class="left-header">
             <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> Instructions </button>
-            <span style="opacity: 60%; margin-left: 1em">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
+            <span style="opacity: 60%; margin-left: 1em">Draw rectangles around all scientific Figures, Tables and their corresponding Captions.</span>
         </span>
         <span class="right-header">
             <span v-if="annotationsEmpty()" style="vertical-align: middle">
