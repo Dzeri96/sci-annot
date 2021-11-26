@@ -36,7 +36,7 @@
     <!-- Review mode -->
     <span v-else>
         <b>ID:</b> {{assignment.assignment_id}} <b>AppVersion:</b> {{assignment.answer.appVersion}} <b>Time:</b> {{assignment.answer.secondCounter}}s
-        <span v-if="comment"><b>Comment:</b> {{comment}}</span>
+        <span v-if="assignment.answer.comment"><b>Comment:</b> {{assignment.answer.comment}}</span>
     </span>
 </template>
 
