@@ -20,6 +20,7 @@
                 <input type="hidden" name="canvasHeight" :value="annotationStore.canvasHeight"/>
                 <input type="hidden" name="canvasWidth" :value="annotationStore.canvasWidth"/>
                 <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
+                <input v-if="comment" type="hidden" name="comment" :value="comment"/>
                 <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()" class="r6o-btn"/>
             </form>
             <!-- Icon made by https://www.flaticon.com/authors/muhammad-ali -->
@@ -66,6 +67,8 @@ export default class AppHeader extends Vue {
     private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
     // Placeholder value for the MTurk submit link
     private turkSubmitTo = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
+    // Parsed from query params, if it exists
+    private comment = '';
     
 
     private acceptEmpty: boolean = false;
@@ -99,6 +102,9 @@ export default class AppHeader extends Vue {
         if (submitParam) {
             this.turkSubmitTo = submitParam + '/mturk/externalSubmit';
         }
+
+        let commentParam = this.urlParams.get('comment');
+        if (commentParam) this.comment = commentParam;
     }
 
     annotationsEmpty() {
