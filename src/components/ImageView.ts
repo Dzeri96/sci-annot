@@ -19,8 +19,12 @@ export default class ImageView extends Vue {
     private answer: Answer;
     private anno;
     private imLoaded = false;
+
     private pointerActive = true;
     private shiftButtonHeld = false;
+    private editorOpen = false;
+    private cursorInsideCanvas = true;
+
     // Used to update crosshair guide locations
     private hLineY = 50;
     private vLineX = 50;
@@ -28,29 +32,30 @@ export default class ImageView extends Vue {
     private urlParams = new URLSearchParams(window.location.search);
     private widgetFocusObserver = new MutationObserver(this.focusWidget);
 
-    private handleEditorOpenOrClosed = (mutationsList, observer) => {
-        if(mutationsList && mutationsList[0].addedNodes.length) {
-            let widget = document.getElementById('fig-cap-widget');
-            widget.focus();
-            this.pointerActive = false;
-
-            let widgetFrame = document.getElementsByClassName('r6o-editor')[0];
-            // Creates a change listener on the widget to keep it in focus
-            this.widgetFocusObserver.observe(widgetFrame, {attributes: true, childList: false});
-        } else if (mutationsList && mutationsList[0].removedNodes.length && !this.shiftButtonHeld) {
-            this.pointerActive = true;
-        }
-    }
-
     private focusWidget(mutationsList, observer) {
         let widget = document.getElementById('fig-cap-widget');
             widget.focus();
     }
 
-    private widgetOpenObserver = new MutationObserver(this.handleEditorOpenOrClosed);
-
     mounted() {
         this.imView = this.$refs.imview as Element;
+        let handleEditorOpenOrClosed = (mutationsList, observer) => {
+            if(mutationsList && mutationsList[0].addedNodes.length) {
+                this.editorOpen = true;
+                let widget = document.getElementById('fig-cap-widget');
+                widget.focus();
+                this.changePointerState(false);
+    
+                let widgetFrame = document.getElementsByClassName('r6o-editor')[0];
+                // Creates a change listener on the widget to keep it in focus
+                this.widgetFocusObserver.observe(widgetFrame, {attributes: true, childList: false});
+            } else if (mutationsList && mutationsList[0].removedNodes.length && !this.shiftButtonHeld) {
+                this.editorOpen = false;
+                this.changePointerState(true);
+            }
+        }
+
+        let widgetOpenObserver = new MutationObserver(handleEditorOpenOrClosed);
 
         let imageUrl = this.urlParams.get('image') ?? placeholderPic;
         // Reference: https://openseadragon.github.io/docs/OpenSeadragon.html
@@ -100,7 +105,17 @@ export default class ImageView extends Vue {
         this.anno.setDrawingTool('rect');
         this.anno.setVisible(true);
 
-        this.widgetOpenObserver.observe(this.imView.childNodes[4], {attributes: false, childList: true});
+        widgetOpenObserver.observe(this.imView.childNodes[4], {attributes: false, childList: true});
+        
+        this.imView.addEventListener('mouseenter', (evt) => {
+            this.cursorInsideCanvas = true;
+            this.changePointerState(true);
+        });
+
+        this.imView.addEventListener('mouseleave', (evt) => {
+            this.cursorInsideCanvas = false;
+            this.changePointerState(false);
+        })
 
         this.anno.on('createAnnotation', (annot) => {
             this.annotationStore.addAnnotation(annot);
@@ -128,8 +143,7 @@ export default class ImageView extends Vue {
         document.addEventListener('keydown', (event: KeyboardEvent) => {
             if(event.key == 'Shift') {
                 this.shiftButtonHeld = true;
-                this.pointerActive = false;
-                document.removeEventListener('mousemove', this.updateGuideLocation);
+                this.changePointerState(false);
             } else if (event.code == 'Space') {
                 let widgetFooterArray = document.getElementsByClassName('r6o-footer');
                 if (widgetFooterArray) {
@@ -144,8 +158,7 @@ export default class ImageView extends Vue {
         document.addEventListener('keyup', (event: KeyboardEvent) => {
             if(event.key == 'Shift') {
                 this.shiftButtonHeld = false;
-                this.pointerActive = true;
-                document.addEventListener('mousemove', this.updateGuideLocation);
+                this.changePointerState(true);
             }
         })
     }
@@ -162,5 +175,15 @@ export default class ImageView extends Vue {
         var rect = this.imView.getBoundingClientRect();
         this.vLineX = Math.max(e.clientX-2 - rect.left, 0);
         this.hLineY = Math.max(e.clientY-2 - rect.top, 0);
+    }
+
+    private changePointerState(newState: boolean) {
+        this.pointerActive = newState && !this.editorOpen && !this.shiftButtonHeld && this.cursorInsideCanvas;
+
+        if(!this.pointerActive) {
+            document.removeEventListener('mousemove', this.updateGuideLocation);
+        } else {
+            document.addEventListener('mousemove', this.updateGuideLocation);
+        }
     }
 }

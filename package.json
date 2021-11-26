@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@dzeri96/annotorious-openseadragon": "^2.7.1",
+    "@dzeri96/annotorious-openseadragon": "^2.7.2",
     "@recogito/annotorious-openseadragon": "^2.6.0",
     "@types/openseadragon": "^2.4.8",
     "core-js": "^3.18.3",
