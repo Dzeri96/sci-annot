@@ -33,8 +33,10 @@
             </transition>
         </span>
     </span>
+    <!-- Review mode -->
     <span v-else>
         <b>ID:</b> {{assignment.assignment_id}} <b>AppVersion:</b> {{assignment.answer.appVersion}} <b>Time:</b> {{assignment.answer.secondCounter}}s
+        <span v-if="comment"><b>Comment:</b> {{comment}}</span>
     </span>
 </template>
 
