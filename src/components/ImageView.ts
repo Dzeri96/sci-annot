@@ -5,13 +5,17 @@ import '@recogito/annotorious-openseadragon/dist/annotorious.min.css';
 import FigCapWidget from '../widgets/figure-caption';
 import { Options, Vue } from "vue-class-component";
 import AnnotationStore from '@/services/annotationStore';
-import Answer from '../models/Answer'
+import Answer from '../models/Answer';
+import ScrollEdges from './ScrollEdges.vue';
 
 
 @Options({
     props: {
         annotationStore: AnnotationStore,
         answer: Answer
+    },
+    components: {
+        ScrollEdges
     }
 })
 export default class ImageView extends Vue {
@@ -125,21 +129,24 @@ export default class ImageView extends Vue {
                 document.addEventListener('mousemove', this.updateGuideLocation);
             } else if (event.code == 'Space') {
                 let widgetFooterArray = document.getElementsByClassName('r6o-footer');
-                if (widgetFooterArray) {
+                if (widgetFooterArray.length) {
                     // The number of buttons changes - always get the last one
                     let lastIndex = widgetFooterArray[0].childNodes.length - 1;
                     let okButton = widgetFooterArray[0].childNodes[lastIndex] as HTMLButtonElement;
                     okButton.click();
                 }
+                viewer.viewport.panBy(new OpenSeadragon.Point(0.1,0.2)); 
             }
-        }) 
+        });
 
         document.addEventListener('keyup', (event: KeyboardEvent) => {
             if(event.key == 'Shift') {
                 this.pointerActive = false;
                 document.removeEventListener('mousemove', this.updateGuideLocation);
             }
-        })
+        });
+
+        //(document.getElementById('contentDiv').querySelector('.openseadragon-canvas') as any).focus();
     }
 
     /**
