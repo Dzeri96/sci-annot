@@ -6,7 +6,7 @@
     </div>
     <div v-show="pointerActive" id="vertical-line" :style="{'left':vLineX+'px'}"></div>
     <div v-show="pointerActive" id="horizontal-line" :style="{'top':hLineY+'px'}"></div>
-    <scroll-edges/>
+    <scroll-edges @scroll="scroll" :scrollTimeoutMs="30"/>
   </div>
 </template>
 

@@ -30,6 +30,9 @@ export default class ImageView extends Vue {
     private imView: Element;
     private urlParams = new URLSearchParams(window.location.search);
     private widgetFocusObserver = new MutationObserver(this.focusWidget);
+    private percentScroll = 0.01;
+    private viewer;
+    private currentlyDrawing = false;
 
     private handleEditorOpen = (mutationsList, observer) => {
         if(mutationsList && mutationsList[0].addedNodes.length) {
@@ -54,7 +57,7 @@ export default class ImageView extends Vue {
 
         let imageUrl = this.urlParams.get('image') ?? placeholderPic;
         // Reference: https://openseadragon.github.io/docs/OpenSeadragon.html
-        let viewer = OpenSeadragon({
+        this.viewer = OpenSeadragon({
             id: 'imview',
             tileSources: {
                 type: 'image',
@@ -82,7 +85,7 @@ export default class ImageView extends Vue {
             }
         });
 
-        viewer.addHandler('open-failed', () => {
+        this.viewer.addHandler('open-failed', () => {
             this.imLoaded = true;
         })
 
@@ -95,7 +98,7 @@ export default class ImageView extends Vue {
             ],
             formatter: figCapWidget.figCapFormatter
         }
-        this.anno = Annotorious(viewer, annoConfig);
+        this.anno = Annotorious(this.viewer, annoConfig);
         this.anno.setDrawingTool('rect');
         this.anno.setVisible(true);
 
@@ -116,6 +119,14 @@ export default class ImageView extends Vue {
             this.reRenderAnnotations();
         });
 
+        this.anno.on('startSelection', () => {
+            this.currentlyDrawing = true;
+        });
+
+        this.anno.on('createSelection', () => {
+            this.currentlyDrawing = false;
+        }); 
+
         if (this.answer) {
             for (const annotation of this.answer.annotations) {
                 this.annotationStore.addAnnotation(annotation);
@@ -134,8 +145,7 @@ export default class ImageView extends Vue {
                     let lastIndex = widgetFooterArray[0].childNodes.length - 1;
                     let okButton = widgetFooterArray[0].childNodes[lastIndex] as HTMLButtonElement;
                     okButton.click();
-                }
-                viewer.viewport.panBy(new OpenSeadragon.Point(0.1,0.2)); 
+                } 
             }
         });
 
@@ -161,5 +171,19 @@ export default class ImageView extends Vue {
         var rect = this.imView.getBoundingClientRect();
         this.vLineX = Math.max(e.clientX-2 - rect.left, 0);
         this.hLineY = Math.max(e.clientY-2 - rect.top, 0);
+    }
+
+    private scroll(activeSides: string[]) {
+        if(this.currentlyDrawing) {
+            let xDelta = 0;
+            let yDelta = 0;
+
+            if (activeSides.includes('left-edge')) xDelta += -this.percentScroll;
+            if (activeSides.includes('top-edge')) yDelta += -this.percentScroll;
+            if (activeSides.includes('right-edge')) xDelta += this.percentScroll;
+            if (activeSides.includes('bottom-edge')) yDelta += this.percentScroll;
+
+            this.viewer.viewport.panBy(new OpenSeadragon.Point(xDelta, yDelta), false);
+        }
     }
 }
