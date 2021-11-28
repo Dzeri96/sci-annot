@@ -1,9 +1,10 @@
 <template>
     <span v-if="!assignment" class="header-container">
         <span class="left-header">
-            <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> Instructions </button>
+            <button @click="toggleTutorial" :class="{'selected': isTutorialVisible, 'not-seen': !tutorialSeen}"> Instructions </button>
             <span style="opacity: 60%; margin-left: 1em">Hold<b>SHIFT</b> to draw rectangles around all scientific Figures, Tables and their correspoding Captions.</span>
         </span>
+        <tutorial-tooltip v-if="!tutorialSeen"/>
         <span class="right-header">
             <span v-if="annotationsEmpty()" style="vertical-align: middle">
                 <span>Nothing found</span>
@@ -45,10 +46,12 @@ import AnnotationStore from '@/services/annotationStore';
 import FeedbackPopup from './FeedbackPopup.vue';
 import { Options, Vue } from "vue-class-component";
 import { Prop } from 'vue-property-decorator';
+import TutorialTooltip from './TutorialTooltip.vue';
 
 @Options({
     components: {
-        FeedbackPopup
+        FeedbackPopup,
+        TutorialTooltip
     }
 })
 export default class AppHeader extends Vue {
@@ -65,6 +68,7 @@ export default class AppHeader extends Vue {
     private urlParams = new URLSearchParams(window.location.search);
     // Injected from package.json
     private appVersion = process.env.VUE_APP_VERSION;
+    private SEEN_TUTORIAL_KEY = `${this.appVersion}_seenTutorial`;
     // Placeholder value for the MTurk assignment id
     private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
     // Placeholder value for the MTurk submit link
@@ -72,10 +76,10 @@ export default class AppHeader extends Vue {
     // Parsed from query params, if it exists
     private comment = '';
     
-
     private acceptEmpty: boolean = false;
     private acceptOrphans: boolean = false;
     private showModal = false;
+    private tutorialSeen = false;
 
     private submit() {
         let result = {
@@ -98,6 +102,8 @@ export default class AppHeader extends Vue {
         // Get assignment id from URL params
         let idParam = this.urlParams.get('assignmentId');
         if (idParam) this.assignmentId = idParam;
+        //if (this.assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE') this.$emit('toggle-tutorial');
+        this.tutorialSeen = !!localStorage.getItem(this.SEEN_TUTORIAL_KEY);
 
         // Get submit link from URL params
         let submitParam = this.urlParams.get('turkSubmitTo');
@@ -127,6 +133,12 @@ export default class AppHeader extends Vue {
     submitForm() {
         (this.$refs.submitButton as any).click();
     }
+
+    toggleTutorial() {
+        this.$emit('toggle-tutorial');
+        localStorage.setItem(this.SEEN_TUTORIAL_KEY, 'true');
+        this.tutorialSeen = true;
+    }
 }
 
 </script>
@@ -140,6 +152,7 @@ export default class AppHeader extends Vue {
         border-width: 2px 0px 2px 0px;
         height: 2em;
         padding: 0 4px 0 0;
+        position: relative;
     }
 
     .left-header {
@@ -188,6 +201,33 @@ export default class AppHeader extends Vue {
 
     form {
         height: 100%;
+    }
+
+    .not-seen {
+        box-shadow: 0 0 0 rgba(163,193,225, 0.4);
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            -moz-box-shadow: 0 0 0 0 rgba(163,193,225, 0.9);
+            box-shadow: 0 0 0 0 rgba(163,193,225, 0.9);
+            background-color: rgba(163,193,225, 0.9);
+        }
+        40% {
+            background-color: rgba(163,193,225, 0.2);
+        }
+        90% {
+            -moz-box-shadow: 0 0 10px 30px rgba(163,193,225, 0);
+            box-shadow: 0 0 10px 30px rgba(163,193,225, 0);
+            background-color: rgba(163,193,225, 0);
+            
+        }
+        100% {
+            -moz-box-shadow: 0 0 0 0 rgba(163,193,225, 0);
+            box-shadow: 0 0 0 0 rgba(163,193,225, 0);
+            background-color: rgba(163,193,225, 0);
+        }
     }
 
 </style>
