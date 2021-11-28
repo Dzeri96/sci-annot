@@ -5,13 +5,17 @@ import '@dzeri96/annotorious-openseadragon/dist/annotorious.min.css';
 import FigCapWidget from '../widgets/figure-caption';
 import { Options, Vue } from "vue-class-component";
 import AnnotationStore from '@/services/annotationStore';
-import Answer from '../models/Answer'
+import Answer from '../models/Answer';
+import ScrollEdges from './ScrollEdges.vue';
 
 
 @Options({
     props: {
         annotationStore: AnnotationStore,
         answer: Answer
+    },
+    components: {
+        ScrollEdges
     }
 })
 export default class ImageView extends Vue {
@@ -31,6 +35,9 @@ export default class ImageView extends Vue {
     private imView: Element;
     private urlParams = new URLSearchParams(window.location.search);
     private widgetFocusObserver = new MutationObserver(this.focusWidget);
+    private percentScroll = 0.01;
+    private viewer;
+    private currentlyDrawing = false;
 
     private focusWidget(mutationsList, observer) {
         let widget = document.getElementById('fig-cap-widget');
@@ -59,7 +66,7 @@ export default class ImageView extends Vue {
 
         let imageUrl = this.urlParams.get('image') ?? placeholderPic;
         // Reference: https://openseadragon.github.io/docs/OpenSeadragon.html
-        let viewer = OpenSeadragon({
+        this.viewer = OpenSeadragon({
             id: 'imview',
             tileSources: {
                 type: 'image',
@@ -87,7 +94,7 @@ export default class ImageView extends Vue {
             }
         });
 
-        viewer.addHandler('open-failed', () => {
+        this.viewer.addHandler('open-failed', () => {
             this.imLoaded = true;
         })
 
@@ -101,7 +108,7 @@ export default class ImageView extends Vue {
             formatter: figCapWidget.figCapFormatter,
             invertDrawingMode: true
         }
-        this.anno = Annotorious(viewer, annoConfig);
+        this.anno = Annotorious(this.viewer, annoConfig);
         this.anno.setDrawingTool('rect');
         this.anno.setVisible(true);
 
@@ -132,6 +139,14 @@ export default class ImageView extends Vue {
             this.reRenderAnnotations();
         });
 
+        this.anno.on('startSelection', () => {
+            this.currentlyDrawing = true;
+        });
+
+        this.anno.on('createSelection', () => {
+            this.currentlyDrawing = false;
+        }); 
+
         if (this.answer) {
             for (const annotation of this.answer.annotations) {
                 this.annotationStore.addAnnotation(annotation);
@@ -146,21 +161,23 @@ export default class ImageView extends Vue {
                 this.changePointerState(false);
             } else if (event.code == 'Space') {
                 let widgetFooterArray = document.getElementsByClassName('r6o-footer');
-                if (widgetFooterArray) {
+                if (widgetFooterArray.length) {
                     // The number of buttons changes - always get the last one
                     let lastIndex = widgetFooterArray[0].childNodes.length - 1;
                     let okButton = widgetFooterArray[0].childNodes[lastIndex] as HTMLButtonElement;
                     okButton.click();
-                }
+                } 
             }
-        }) 
+        });
 
         document.addEventListener('keyup', (event: KeyboardEvent) => {
             if(event.key == 'Shift') {
                 this.shiftButtonHeld = false;
                 this.changePointerState(true);
             }
-        })
+        });
+
+        //(document.getElementById('contentDiv').querySelector('.openseadragon-canvas') as any).focus();
     }
 
     /**
@@ -184,6 +201,20 @@ export default class ImageView extends Vue {
             document.removeEventListener('mousemove', this.updateGuideLocation);
         } else {
             document.addEventListener('mousemove', this.updateGuideLocation);
+        }
+    }
+    
+    private scroll(activeSides: string[]) {
+        if(this.currentlyDrawing) {
+            let xDelta = 0;
+            let yDelta = 0;
+
+            if (activeSides.includes('left-edge')) xDelta += -this.percentScroll;
+            if (activeSides.includes('top-edge')) yDelta += -this.percentScroll;
+            if (activeSides.includes('right-edge')) xDelta += this.percentScroll;
+            if (activeSides.includes('bottom-edge')) yDelta += this.percentScroll;
+
+            this.viewer.viewport.panBy(new OpenSeadragon.Point(xDelta, yDelta), false);
         }
     }
 }
