@@ -121,10 +121,12 @@ export default class ImageView extends Vue {
 
         this.anno.on('startSelection', () => {
             this.currentlyDrawing = true;
+            //this.changePointerState(false);
         });
 
         this.anno.on('createSelection', () => {
             this.currentlyDrawing = false;
+            //this.changePointerState(true);
         }); 
 
         if (this.answer) {
@@ -133,6 +135,8 @@ export default class ImageView extends Vue {
             }
             this.reRenderAnnotations();
         }
+        
+        if (this.pointerActive) this.imView.addEventListener('mousemove', this.updateGuideLocation);
 
         document.addEventListener('keydown', (event: KeyboardEvent) => {
             if(event.key == 'Shift') {
