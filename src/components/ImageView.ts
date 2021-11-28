@@ -199,12 +199,17 @@ export default class ImageView extends Vue {
     }
 
     private changePointerState(newState: boolean) {
-        this.pointerActive = newState && !this.editorOpen && !this.shiftButtonHeld && this.cursorInsideCanvas;
+        this.pointerActive = 
+            newState &&
+            !this.editorOpen &&
+            !this.shiftButtonHeld &&
+            this.cursorInsideCanvas &&
+            !this.currentlyDrawing;
 
         if(!this.pointerActive) {
-            document.removeEventListener('mousemove', this.updateGuideLocation);
+            this.imView.removeEventListener('mousemove', this.updateGuideLocation);
         } else {
-            document.addEventListener('mousemove', this.updateGuideLocation);
+            this.imView.addEventListener('mousemove', this.updateGuideLocation);
         }
     }
     
