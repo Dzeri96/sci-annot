@@ -204,7 +204,7 @@ export default class FigCapWidget {
                     this.annotationStore.getAnnotationClass(underlying)
                 );
             }
-            svg.childNodes[svg.childNodes.length -4].textContent = friendlyName;
+            svg.childNodes[svg.childNodes.length -6].textContent = friendlyName;
         }
 
         let annoClass = this.annotationStore.getAnnotationClass(underlying) ?? '';
@@ -213,12 +213,18 @@ export default class FigCapWidget {
             if (this.annotationStore.childTypes.indexOf(annoClass) != -1) {
                 let parent = this.annotationStore.getAnnotationParentId(underlying);
                 if(!parent) {
-                    svg.childNodes[svg.childNodes.length -2].textContent = 'Parentless';
+                    svg.childNodes[svg.childNodes.length -4].textContent = 'No Reference';
+                } else {
+                    let parentFriendlyName = this.annotationStore.getFriendlyName(parent);
+                    if (parentFriendlyName) {
+                        svg.childNodes[svg.childNodes.length -2].textContent = `References ${parentFriendlyName}`;
+                    }
+                    
                 }
             } else if (this.annotationStore.parentTypes.indexOf(annoClass) != -1) {
                 let isFree = this.annotationStore.getFreeParentIds().indexOf(underlying.id) != -1;
                 if (isFree) {
-                    svg.childNodes[svg.childNodes.length -2].textContent = 'Childless';
+                    svg.childNodes[svg.childNodes.length -4].textContent = 'No Caption';
                 }
             }
         }

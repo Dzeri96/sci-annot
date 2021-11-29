@@ -39,6 +39,18 @@ export default class ImageView extends Vue {
     private viewer;
     private currentlyDrawing = false;
 
+    private handleEditorOpen = (mutationsList, observer) => {
+        console.log('EditorOpen!');
+        if(mutationsList && mutationsList[0].addedNodes.length) {
+            let widget = document.getElementById('fig-cap-widget');
+            widget.focus();
+
+            let widgetFrame = document.getElementsByClassName('r6o-editor')[0];
+            // Creates a change listener on the widget to keep it in focus
+            this.widgetFocusObserver.observe(widgetFrame, {attributes: true, childList: false});
+        }
+    }
+
     private focusWidget(mutationsList, observer) {
         let widget = document.getElementById('fig-cap-widget');
             widget.focus();
@@ -111,8 +123,6 @@ export default class ImageView extends Vue {
         this.anno = Annotorious(this.viewer, annoConfig);
         this.anno.setDrawingTool('rect');
         this.anno.setVisible(true);
-
-        widgetOpenObserver.observe(this.imView.childNodes[4], {attributes: false, childList: true});
         
         this.imView.addEventListener('mouseenter', (evt) => {
             this.cursorInsideCanvas = true;
@@ -123,6 +133,7 @@ export default class ImageView extends Vue {
             this.cursorInsideCanvas = false;
             this.changePointerState(false);
         })
+        widgetOpenObserver.observe(this.imView.childNodes[5], {attributes: false, childList: true});
 
         this.anno.on('createAnnotation', (annot) => {
             this.annotationStore.addAnnotation(annot);

@@ -9,5 +9,6 @@
         </filter>
     </defs>
     <text id="mainText" filter="url(#solid)" x="2" y="15" fill="white"></text>
-    <text id="mainText" filter="url(#solid)" x="2" y="35" fill="#D88C9A"></text>
+    <text id="errorText" filter="url(#solid)" x="2" y="35" fill="#D88C9A"></text>
+    <text id="parentText" filter="url(#solid)" x="2" y="35" fill="#dedede"></text>
 </svg> 

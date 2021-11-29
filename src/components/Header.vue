@@ -1,16 +1,17 @@
 <template>
     <span v-if="!assignment" class="header-container">
         <span class="left-header">
-            <button @click="this.$emit('toggle-tutorial')" :class="{'selected': isTutorialVisible}"> Instructions </button>
+            <button @click="toggleTutorial" :class="{'selected': isTutorialVisible, 'not-seen': !tutorialSeen}"> Instructions </button>
             <span style="opacity: 60%; margin-left: 1em">Draw rectangles around all scientific Figures, Tables and their corresponding Captions.</span>
         </span>
+        <tutorial-tooltip v-if="!tutorialSeen"/>
         <span class="right-header">
             <span v-if="annotationsEmpty()" style="vertical-align: middle">
                 <span>Nothing found</span>
                 <input type="checkbox" v-model="acceptEmpty"/>
             </span>
             <span v-if="orphansOrChildless()">
-                <span>Elements with no parent/child</span>
+                <span>Elements without reference/caption</span>
                 <input type="checkbox" v-model="acceptOrphans"/>
             </span>
             <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
@@ -21,15 +22,19 @@
                 <input type="hidden" name="canvasWidth" :value="annotationStore.canvasWidth"/>
                 <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
                 <input v-if="comment" type="hidden" name="comment" :value="comment"/>
-                <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()" class="r6o-btn"/>
+                <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()" class="r6o-btn" @click="submit"/>
             </form>
             <!-- Icon made by https://www.flaticon.com/authors/muhammad-ali -->
-            <button id="feedbackButton" title="Submit with feedback" :disabled="!submitEnabled()" @click="showModal = true" class="r6o-btn">
+            <button id="feedbackButton" title="Submit with feedback" :disabled="!submitEnabled()" @click="showFeedbackModal = true" class="r6o-btn">
                 <img src="../assets/feedback.png" alt="Feedback"/>
             </button>
             <transition name="modal">
-                <feedback-popup v-if="showModal" @close="showModal=false" @submit="submitForm()">
+                <feedback-popup v-if="showFeedbackModal" @close="showFeedbackModal=false" @submit="submitForm()">
                 </feedback-popup>
+            </transition>
+            <transition name="modal">
+                <yes-no-modal v-if="showYesNoModal" @close="showYesNoModal=false" @submit="submitForm()">
+                </yes-no-modal>
             </transition>
         </span>
     </span>
@@ -45,10 +50,14 @@ import AnnotationStore from '@/services/annotationStore';
 import FeedbackPopup from './FeedbackPopup.vue';
 import { Options, Vue } from "vue-class-component";
 import { Prop } from 'vue-property-decorator';
+import TutorialTooltip from './TutorialTooltip.vue';
+import YesNoModal from './YesNoModal.vue';
 
 @Options({
     components: {
-        FeedbackPopup
+        FeedbackPopup,
+        TutorialTooltip,
+        YesNoModal
     }
 })
 export default class AppHeader extends Vue {
@@ -65,6 +74,9 @@ export default class AppHeader extends Vue {
     private urlParams = new URLSearchParams(window.location.search);
     // Injected from package.json
     private appVersion = process.env.VUE_APP_VERSION;
+    private majorVersion = this.appVersion.match(/\d+/)[0];
+    private SEEN_TUTORIAL_KEY = `${this.majorVersion}_seenTutorial`;
+    private ACCEPTED_NO_REF_KEY = `${this.majorVersion}_acceptedNoRef`;
     // Placeholder value for the MTurk assignment id
     private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
     // Placeholder value for the MTurk submit link
@@ -72,24 +84,27 @@ export default class AppHeader extends Vue {
     // Parsed from query params, if it exists
     private comment = '';
     
-
     private acceptEmpty: boolean = false;
     private acceptOrphans: boolean = false;
-    private showModal = false;
+    private showFeedbackModal = false;
+    private showYesNoModal = false;
 
-    private submit() {
-        let result = {
-            version: this.appVersion,
-            timeSec: this.counter,
-            annotations: this.annotationStore.annotations 
+    // Saved in local storage
+    private tutorialSeen = false;
+    private acceptedNoRef = false;
+
+    private submit(e: Event) {
+        if (this.acceptOrphans && !this.acceptedNoRef) {
+            this.showYesNoModal = true;
+            e.preventDefault();
         }
-        console.log('Result: ' + JSON.stringify(result));
+        
     }
 
     mounted() {
         // Start counter
         setInterval(() => {
-        this.counter++
+            this.counter++
         }, 1000)
 
         // Get version
@@ -98,6 +113,8 @@ export default class AppHeader extends Vue {
         // Get assignment id from URL params
         let idParam = this.urlParams.get('assignmentId');
         if (idParam) this.assignmentId = idParam;
+        //if (this.assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE') this.$emit('toggle-tutorial');
+        this.tutorialSeen = !!localStorage.getItem(this.SEEN_TUTORIAL_KEY);
 
         // Get submit link from URL params
         let submitParam = this.urlParams.get('turkSubmitTo');
@@ -107,6 +124,8 @@ export default class AppHeader extends Vue {
 
         let commentParam = this.urlParams.get('comment');
         if (commentParam) this.comment = commentParam;
+
+        this.acceptedNoRef = !!localStorage.getItem(this.ACCEPTED_NO_REF_KEY);
     }
 
     annotationsEmpty() {
@@ -125,7 +144,17 @@ export default class AppHeader extends Vue {
     }
 
     submitForm() {
+        if (this.acceptOrphans) {
+            this.acceptedNoRef = true;
+            localStorage.setItem(this.ACCEPTED_NO_REF_KEY, 'true');
+        }
         (this.$refs.submitButton as any).click();
+    }
+
+    toggleTutorial() {
+        this.$emit('toggle-tutorial');
+        localStorage.setItem(this.SEEN_TUTORIAL_KEY, 'true');
+        this.tutorialSeen = true;
     }
 }
 
@@ -140,6 +169,7 @@ export default class AppHeader extends Vue {
         border-width: 2px 0px 2px 0px;
         height: 2em;
         padding: 0 4px 0 0;
+        position: relative;
     }
 
     .left-header {
@@ -188,6 +218,33 @@ export default class AppHeader extends Vue {
 
     form {
         height: 100%;
+    }
+
+    .not-seen {
+        box-shadow: 0 0 0 rgba(163,193,225, 0.4);
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            -moz-box-shadow: 0 0 0 0 rgba(163,193,225, 0.9);
+            box-shadow: 0 0 0 0 rgba(163,193,225, 0.9);
+            background-color: rgba(163,193,225, 0.9);
+        }
+        40% {
+            background-color: rgba(163,193,225, 0.2);
+        }
+        90% {
+            -moz-box-shadow: 0 0 10px 30px rgba(163,193,225, 0);
+            box-shadow: 0 0 10px 30px rgba(163,193,225, 0);
+            background-color: rgba(163,193,225, 0);
+            
+        }
+        100% {
+            -moz-box-shadow: 0 0 0 0 rgba(163,193,225, 0);
+            box-shadow: 0 0 0 0 rgba(163,193,225, 0);
+            background-color: rgba(163,193,225, 0);
+        }
     }
 
 </style>

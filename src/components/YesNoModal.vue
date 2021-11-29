@@ -3,21 +3,18 @@
     <div class="modal-wrapper">
       <div class="modal-container">
         <div class="modal-header">
-          <h2>Submit with feedback</h2>
+          <h2>Are you sure?</h2>
         </div>
 
         <div class="modal-body">
-          <textarea
-            id="feedback-text-area"
-            form="mturk_form"
-            name="feedback"
-            placeholder="Enter feedback here and submit the HIT with it."
-          />
+          You have indicated that there are captions <i style="color: #D88C9A">without a reference</i>, or figures/tables <i style="color: #D88C9A">without a caption</i> on this page.
+          <p/>
+          Are you sure this is correct? This question will not be asked again.
         </div>
 
         <div class="modal-footer">
-          <button class="r6o-btn outline" @click="$emit('close')">Cancel</button>
-          <button class="r6o-btn" @click="$emit('submit')">Submit</button>
+          <button class="r6o-btn outline" @click="$emit('close')">No</button>
+          <button class="r6o-btn" @click="$emit('submit')">Yes</button>
         </div>
       </div>
     </div>
@@ -27,12 +24,12 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 
-export default class FeedbackPopup extends Vue {
-  private feedback: string = "";
+export default class YesNoModal extends Vue {
+
 }
 </script>
 
-<style scoped>
+<style>
 
 .modal-mask {
   position: fixed;
@@ -50,9 +47,7 @@ export default class FeedbackPopup extends Vue {
   transform: translateY(-50%) translateX(-50%);
   left: 50%;
   width: 30em;
-  height: 15em;
   min-width: 30em;
-  min-height: 15em;
   resize: both;
   overflow: hidden;
 }
@@ -68,6 +63,7 @@ export default class FeedbackPopup extends Vue {
 .modal-header {
   padding: 8px;
   display: flex;
+  border-bottom: 1px solid lightgray;
 }
 
 .modal-header h2 {
@@ -84,13 +80,13 @@ export default class FeedbackPopup extends Vue {
   padding: 0;
   flex-grow: 1;
   padding: 8px;
-  background-color: rgba(0, 0, 0, 0.05);
 }
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
   padding: 8px 0;
+  border-top: 1px solid lightgray;
 }
 
 .modal-footer button {
