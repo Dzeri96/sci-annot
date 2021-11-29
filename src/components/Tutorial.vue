@@ -78,7 +78,7 @@
 						Save selection with the <span class="hotkey">Space</span> key.
 					</li>
 					<li>
-						Move the document with the <span class="hotkey">Shift</span> key.
+						Move the document with the <span class="hotkey">Shift</span> key or the <span class="hotkey">Middle mouse button</span>.
 					</li>
 				</ul>
 			</div>

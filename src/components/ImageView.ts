@@ -26,6 +26,7 @@ export default class ImageView extends Vue {
 
     private pointerActive = true;
     private shiftButtonHeld = false;
+    private middleMouseHeld = false;
     private editorOpen = false;
     private cursorInsideCanvas = true;
 
@@ -40,7 +41,6 @@ export default class ImageView extends Vue {
     private currentlyDrawing = false;
 
     private handleEditorOpen = (mutationsList, observer) => {
-        console.log('EditorOpen!');
         if(mutationsList && mutationsList[0].addedNodes.length) {
             let widget = document.getElementById('fig-cap-widget');
             widget.focus();
@@ -110,6 +110,33 @@ export default class ImageView extends Vue {
             this.imLoaded = true;
         })
 
+        let dragPosition;
+        this.viewer.addHandler('canvas-nonprimary-press', (e) => {
+            if(e.button == 1) {
+                dragPosition = e.position.clone();
+                this.middleMouseHeld = true;
+                this.changePointerState(false);
+            }
+        });
+
+        this.viewer.addHandler('canvas-nonprimary-release', (e) => {
+            if(e.button == 1) {
+                this.middleMouseHeld = false;
+                this.changePointerState(true);
+            }
+        });
+
+        new OpenSeadragon.MouseTracker({
+            element: this.viewer.canvas,
+            moveHandler: (event) => {
+                if (this.middleMouseHeld) {
+                    var delta = event.position.minus(dragPosition);
+                    this.viewer.viewport.panBy(this.viewer.viewport.deltaPointsFromPixels(delta.negate()));
+                    dragPosition = event.position.clone();
+                }
+            }
+        });
+
         let figCapWidget = new FigCapWidget(this.annotationStore);
         let figCapWidgetFunc = figCapWidget.figCapWidget;
 
@@ -152,12 +179,12 @@ export default class ImageView extends Vue {
 
         this.anno.on('startSelection', () => {
             this.currentlyDrawing = true;
-            //this.changePointerState(false);
+            this.changePointerState(false);
         });
 
         this.anno.on('createSelection', () => {
             this.currentlyDrawing = false;
-            //this.changePointerState(true);
+            this.changePointerState(true);
         }); 
 
         if (this.answer) {
@@ -214,6 +241,7 @@ export default class ImageView extends Vue {
             newState &&
             !this.editorOpen &&
             !this.shiftButtonHeld &&
+            !this.middleMouseHeld &&
             this.cursorInsideCanvas &&
             !this.currentlyDrawing;
 
