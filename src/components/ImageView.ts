@@ -35,6 +35,7 @@ export default class ImageView extends Vue {
     private currentlyDrawing = false;
 
     private handleEditorOpen = (mutationsList, observer) => {
+        console.log('EditorOpen!');
         if(mutationsList && mutationsList[0].addedNodes.length) {
             let widget = document.getElementById('fig-cap-widget');
             widget.focus();
@@ -102,7 +103,7 @@ export default class ImageView extends Vue {
         this.anno.setDrawingTool('rect');
         this.anno.setVisible(true);
 
-        this.widgetOpenObserver.observe(this.imView.childNodes[4], {attributes: false, childList: true});
+        this.widgetOpenObserver.observe(this.imView.childNodes[5], {attributes: false, childList: true});
 
         this.anno.on('createAnnotation', (annot) => {
             this.annotationStore.addAnnotation(annot);
