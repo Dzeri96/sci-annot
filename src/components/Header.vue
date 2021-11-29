@@ -11,7 +11,7 @@
                 <input type="checkbox" v-model="acceptEmpty"/>
             </span>
             <span v-if="orphansOrChildless()">
-                <span>Elements with no parent/child</span>
+                <span>Elements without reference/caption</span>
                 <input type="checkbox" v-model="acceptOrphans"/>
             </span>
             <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
@@ -93,7 +93,7 @@ export default class AppHeader extends Vue {
     mounted() {
         // Start counter
         setInterval(() => {
-        this.counter++
+            this.counter++
         }, 1000)
 
         // Get version

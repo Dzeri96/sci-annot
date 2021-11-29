@@ -49,8 +49,8 @@
 				<ul>
 					<li>
 						It can happen that a page contains a figure or table without a caption and vice versa.
-						In such a case you will see <i style="color: #D88C9A">Parentless</i> or <i style="color: #D88C9A">Childless</i> in the bounding box.
-						If you are really sure you have selected everything correctly, check <b>Elements with no parent/child</b> next to the submit button.
+						In such a case you will see <i style="color: #D88C9A">No Reference</i> or <i style="color: #D88C9A">No Caption</i> in the bounding box.
+						If you are really sure you have selected everything correctly, check <b>Elements without reference/caption</b> next to the submit button.
 					</li>
 				</ul>
 			</div>
