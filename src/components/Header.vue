@@ -74,8 +74,9 @@ export default class AppHeader extends Vue {
     private urlParams = new URLSearchParams(window.location.search);
     // Injected from package.json
     private appVersion = process.env.VUE_APP_VERSION;
-    private SEEN_TUTORIAL_KEY = `${this.appVersion}_seenTutorial`;
-    private ACCEPTED_NO_REF_KEY = `${this.appVersion}_acceptedNoRef`;
+    private majorVersion = this.appVersion.match(/\d+/)[0];
+    private SEEN_TUTORIAL_KEY = `${this.majorVersion}_seenTutorial`;
+    private ACCEPTED_NO_REF_KEY = `${this.majorVersion}_acceptedNoRef`;
     // Placeholder value for the MTurk assignment id
     private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
     // Placeholder value for the MTurk submit link
