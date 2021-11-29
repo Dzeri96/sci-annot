@@ -182,10 +182,10 @@ export default class ImageView extends Vue {
             this.changePointerState(false);
         });
 
-        this.anno.on('createSelection', () => {
+        this.anno.on('endSelection', () => {
             this.currentlyDrawing = false;
             this.changePointerState(true);
-        }); 
+        });
 
         if (this.answer) {
             for (const annotation of this.answer.annotations) {
