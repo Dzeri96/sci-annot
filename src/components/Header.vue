@@ -22,15 +22,19 @@
                 <input type="hidden" name="canvasWidth" :value="annotationStore.canvasWidth"/>
                 <input type="hidden" name="annotations" :value="JSON.stringify(annotationStore.annotations)"/>
                 <input v-if="comment" type="hidden" name="comment" :value="comment"/>
-                <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()" class="r6o-btn"/>
+                <input type="submit" id="submitButton" ref="submitButton" value="Submit" :disabled="!submitEnabled()" class="r6o-btn" @click="submit"/>
             </form>
             <!-- Icon made by https://www.flaticon.com/authors/muhammad-ali -->
-            <button id="feedbackButton" title="Submit with feedback" :disabled="!submitEnabled()" @click="showModal = true" class="r6o-btn">
+            <button id="feedbackButton" title="Submit with feedback" :disabled="!submitEnabled()" @click="showFeedbackModal = true" class="r6o-btn">
                 <img src="../assets/feedback.png" alt="Feedback"/>
             </button>
             <transition name="modal">
-                <feedback-popup v-if="showModal" @close="showModal=false" @submit="submitForm()">
+                <feedback-popup v-if="showFeedbackModal" @close="showFeedbackModal=false" @submit="submitForm()">
                 </feedback-popup>
+            </transition>
+            <transition name="modal">
+                <yes-no-modal v-if="showYesNoModal" @close="showYesNoModal=false" @submit="submitForm()">
+                </yes-no-modal>
             </transition>
         </span>
     </span>
@@ -47,11 +51,13 @@ import FeedbackPopup from './FeedbackPopup.vue';
 import { Options, Vue } from "vue-class-component";
 import { Prop } from 'vue-property-decorator';
 import TutorialTooltip from './TutorialTooltip.vue';
+import YesNoModal from './YesNoModal.vue';
 
 @Options({
     components: {
         FeedbackPopup,
-        TutorialTooltip
+        TutorialTooltip,
+        YesNoModal
     }
 })
 export default class AppHeader extends Vue {
@@ -69,6 +75,7 @@ export default class AppHeader extends Vue {
     // Injected from package.json
     private appVersion = process.env.VUE_APP_VERSION;
     private SEEN_TUTORIAL_KEY = `${this.appVersion}_seenTutorial`;
+    private ACCEPTED_NO_REF_KEY = `${this.appVersion}_acceptedNoRef`;
     // Placeholder value for the MTurk assignment id
     private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
     // Placeholder value for the MTurk submit link
@@ -78,16 +85,19 @@ export default class AppHeader extends Vue {
     
     private acceptEmpty: boolean = false;
     private acceptOrphans: boolean = false;
-    private showModal = false;
-    private tutorialSeen = false;
+    private showFeedbackModal = false;
+    private showYesNoModal = false;
 
-    private submit() {
-        let result = {
-            version: this.appVersion,
-            timeSec: this.counter,
-            annotations: this.annotationStore.annotations 
+    // Saved in local storage
+    private tutorialSeen = false;
+    private acceptedNoRef = false;
+
+    private submit(e: Event) {
+        if (this.acceptOrphans && !this.acceptedNoRef) {
+            this.showYesNoModal = true;
+            e.preventDefault();
         }
-        console.log('Result: ' + JSON.stringify(result));
+        
     }
 
     mounted() {
@@ -113,6 +123,8 @@ export default class AppHeader extends Vue {
 
         let commentParam = this.urlParams.get('comment');
         if (commentParam) this.comment = commentParam;
+
+        this.acceptedNoRef = !!localStorage.getItem(this.ACCEPTED_NO_REF_KEY);
     }
 
     annotationsEmpty() {
@@ -131,6 +143,10 @@ export default class AppHeader extends Vue {
     }
 
     submitForm() {
+        if (this.acceptOrphans) {
+            this.acceptedNoRef = true;
+            localStorage.setItem(this.ACCEPTED_NO_REF_KEY, 'true');
+        }
         (this.$refs.submitButton as any).click();
     }
 
