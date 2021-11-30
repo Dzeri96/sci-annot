@@ -1,6 +1,6 @@
 let OpenSeadragon = require('openseadragon');
 let Annotorious = require('@dzeri96/annotorious-openseadragon');
-let placeholderPic = require('../assets/96d834586a304382bd623f81b83e3b62-09.png');
+let placeholderPic = require('../assets/96d834586a304382bd623f81b83e3b62-09.webp');
 import '@dzeri96/annotorious-openseadragon/dist/annotorious.min.css';
 import FigCapWidget from '../widgets/figure-caption';
 import { Options, Vue } from "vue-class-component";
