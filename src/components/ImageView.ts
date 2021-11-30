@@ -183,6 +183,14 @@ export default class ImageView extends Vue {
         });
 
         this.anno.on('endSelection', () => {
+            // Dirty hack to allow for the widget to draw with proper coordinates 
+            setTimeout(() => {
+                this.currentlyDrawing = false;
+                this.changePointerState(true);
+            }, 10);
+        });
+
+        this.anno.on('createSelection', () => {
             this.currentlyDrawing = false;
             this.changePointerState(true);
         });
