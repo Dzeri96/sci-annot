@@ -6,11 +6,11 @@
         </span>
         <tutorial-tooltip v-if="!tutorialSeen"/>
         <span class="right-header">
-            <span v-if="annotationsEmpty()" style="vertical-align: middle">
+            <span v-if="annotationsEmpty()" class="text-checkbox">
                 <span>Nothing found</span>
                 <input type="checkbox" v-model="acceptEmpty"/>
             </span>
-            <span v-if="orphansOrChildless()">
+            <span v-if="orphansOrChildless()" class="text-checkbox">
                 <span>Elements without reference/caption</span>
                 <input type="checkbox" v-model="acceptOrphans"/>
             </span>
@@ -174,6 +174,8 @@ export default class AppHeader extends Vue {
 
     .left-header {
         flex-grow: 1;
+        flex-shrink: 10;
+        overflow: hidden;
     }
 
     .header-container span * {
@@ -183,8 +185,12 @@ export default class AppHeader extends Vue {
     }
 
     .right-header {
+        display: flex;
         vertical-align: middle;
         height: 100%;
+        flex-grow: 1;
+        justify-content: flex-end;
+        flex-shrink: 0;
     }
 
     input[type=checkbox]{
@@ -223,6 +229,10 @@ export default class AppHeader extends Vue {
     .not-seen {
         box-shadow: 0 0 0 rgba(163,193,225, 0.4);
         animation: pulse 1s infinite;
+    }
+
+    .text-checkbox {
+        margin: auto 0;
     }
 
     @keyframes pulse {
