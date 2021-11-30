@@ -1,12 +1,12 @@
 <template>
-  <div id="imview" ref="imview" :class="{ pointer: pointerActive }">
+  <div id="imview" ref="imview" :class="{ pointer: pointerActive }" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
     <div class="loader-box" v-if="!imLoaded">
       <div class="loader"></div>
       <div class="loader-text"><b>Loading...</b></div>
     </div>
     <div v-show="pointerActive" id="vertical-line" :style="{'left':vLineX+'px'}"></div>
     <div v-show="pointerActive" id="horizontal-line" :style="{'top':hLineY+'px'}"></div>
-    <scroll-edges v-if="currentlyDrawing" @scroll="scroll" :scrollTimeoutMs="30"/>
+    <scroll-edges ref="scrollEdges" v-if="currentlyDrawing" @scroll="scroll" :scrollTimeoutMs="30"/>
   </div>
 </template>
 

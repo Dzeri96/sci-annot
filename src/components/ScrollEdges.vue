@@ -1,6 +1,5 @@
 <template>
-  <div id="scroll-frame" @mouseenter="frameEnter" @mouseleave="frameLeave">
-    <div
+  <div
       id="left-edge"
       ref="left"
       class="edge"
@@ -80,7 +79,6 @@
       @mouseenter.stop="outerEnter($event.target.id)"
       @mouseleave.stop="outerLeave($event.target.id)"
     />
-  </div>
 </template>
 
 <script lang="ts">
@@ -138,11 +136,11 @@ export default class ScrollEdges extends Vue {
     }
   }
 
-  private frameLeave() {
+  public frameLeave() {
     this.inFrame = false;
   }
 
-  private frameEnter() {
+  public frameEnter() {
     this.inFrame = true;
     // JS sometimes skips frames and ignores edgeLeave so this is needed
     this.activeSides.length = 0;
@@ -168,15 +166,6 @@ export default class ScrollEdges extends Vue {
 <style scoped>
 * {
   --outer-edge-thickness: 20px;
-}
-
-#scroll-frame {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
 }
 
 .edge {

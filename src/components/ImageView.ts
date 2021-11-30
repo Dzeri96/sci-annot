@@ -273,4 +273,14 @@ export default class ImageView extends Vue {
             this.viewer.viewport.panBy(new OpenSeadragon.Point(xDelta, yDelta), false);
         }
     }
+
+    private mouseEnter() {
+        // @ts-ignore
+        if(this.$refs.scrollEdges) this.$refs.scrollEdges.frameEnter();
+    }
+
+    private mouseLeave() {
+        // @ts-ignore
+        if(this.$refs.scrollEdges) this.$refs.scrollEdges.frameLeave();
+    }
 }
