@@ -7,6 +7,7 @@
       :isTutorialVisible="isTutorialVisible" 
       :isImageLoaded="isImageLoaded"
       :assignment="assignment"
+      :assignmentUrl="assignmentUrl"
     />
   </header>
   <main>
@@ -42,11 +43,12 @@ export default class App extends Vue {
   assignmentLoaded: boolean = false;
   answer = null;
   assignment = null;
+  assignmentUrl = null;
 
   async beforeMount() {
-    let assignmentUrl = this.urlParams.get('assignmentUrl');
-    if (assignmentUrl) {
-      fetch(assignmentUrl)
+    this.assignmentUrl = this.urlParams.get('assignmentUrl');
+    if (this.assignmentUrl) {
+      fetch(this.assignmentUrl)
         .then(async response => {
           let parsed = await response.json();
           let fetchedAnswer = Object.assign(new Answer(), parsed.answer);

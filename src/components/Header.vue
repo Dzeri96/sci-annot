@@ -1,8 +1,15 @@
 <template>
-    <span v-if="!assignment" class="header-container">
-        <span class="left-header">
+    <span class="header-container">
+        <span v-if="!assignment" class="left-header">
             <button @click="toggleTutorial" :class="{'selected': isTutorialVisible, 'not-seen': !tutorialSeen}"> Instructions </button>
             <span style="opacity: 60%; margin-left: 1em">Draw rectangles around all scientific Figures, Tables and their corresponding Captions.</span>
+        </span>
+        <!-- Review mode -->
+        <span v-else class="left-header">
+            <b>ID:</b> {{assignment.assignment_id}} 
+            <b>AppVersion:</b> {{assignment.answer.appVersion}}
+            <b>Time:</b> {{assignment.answer.secondCounter}}s
+            <span v-if="assignment.answer.comment"><b>Comment:</b> {{assignment.answer.comment}}</span>
         </span>
         <tutorial-tooltip v-if="!tutorialSeen"/>
         <span class="right-header">
@@ -14,7 +21,9 @@
                 <span>Elements without reference/caption</span>
                 <input type="checkbox" v-model="acceptOrphans"/>
             </span>
-            <form method='post' id='mturk_form' v-bind:action="turkSubmitTo">
+            <form method='post' id='mturk_form' v-bind:action="submitLink">
+                <base v-if="assignmentUrl" target="_parent"/>
+                <input v-if="csrfToken" type="hidden" name="csrfmiddlewaretoken" :value="csrfToken"/>
                 <input type="hidden" name="assignmentId" :value="assignmentId">
                 <input type="hidden" name="appVersion" :value="appVersion"/>
                 <input type="hidden" name="secondCounter" :value="counter"/>
@@ -37,11 +46,6 @@
                 </yes-no-modal>
             </transition>
         </span>
-    </span>
-    <!-- Review mode -->
-    <span v-else>
-        <b>ID:</b> {{assignment.assignment_id}} <b>AppVersion:</b> {{assignment.answer.appVersion}} <b>Time:</b> {{assignment.answer.secondCounter}}s
-        <span v-if="assignment.answer.comment"><b>Comment:</b> {{assignment.answer.comment}}</span>
     </span>
 </template>
 
@@ -69,6 +73,8 @@ export default class AppHeader extends Vue {
     private isImageLoaded: boolean;
     @Prop()
     private assignment: any;
+    @Prop()
+    private assignmentUrl: string;
 
     private counter = 0;
     private urlParams = new URLSearchParams(window.location.search);
@@ -80,10 +86,10 @@ export default class AppHeader extends Vue {
     // Placeholder value for the MTurk assignment id
     private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
     // Placeholder value for the MTurk submit link
-    private turkSubmitTo = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
+    private submitLink = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
     // Parsed from query params, if it exists
     private comment = '';
-    
+    private csrfToken = null;
     private acceptEmpty: boolean = false;
     private acceptOrphans: boolean = false;
     private showFeedbackModal = false;
@@ -110,20 +116,31 @@ export default class AppHeader extends Vue {
         // Get version
         console.log(`App version: ${this.appVersion}`);
 
-        // Get assignment id from URL params
-        let idParam = this.urlParams.get('assignmentId');
-        if (idParam) this.assignmentId = idParam;
         //if (this.assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE') this.$emit('toggle-tutorial');
         this.tutorialSeen = !!localStorage.getItem(this.SEEN_TUTORIAL_KEY);
 
         // Get submit link from URL params
+        if (this.assignmentUrl) {
+            this.submitLink = this.assignmentUrl;
+            this.assignmentId = 'ADMIN_ASSIGNMENT';
+        } 
         let submitParam = this.urlParams.get('turkSubmitTo');
         if (submitParam) {
-            this.turkSubmitTo = submitParam + '/mturk/externalSubmit';
+            this.submitLink = submitParam + '/mturk/externalSubmit';
         }
+
+        // Get assignment id from URL params
+        let idParam = this.urlParams.get('assignmentId');
+        if (idParam) this.assignmentId = idParam;
 
         let commentParam = this.urlParams.get('comment');
         if (commentParam) this.comment = commentParam;
+
+        let csrfParam = this.urlParams.get('csrf_token');
+        if (csrfParam) {
+            console.log('Loaded CSRF!');
+            this.csrfToken = csrfParam;
+        }
 
         this.acceptedNoRef = !!localStorage.getItem(this.ACCEPTED_NO_REF_KEY);
     }
@@ -137,7 +154,7 @@ export default class AppHeader extends Vue {
     }
 
     submitEnabled() {
-        return this.assignmentId != 'ASSIGNMENT_ID_NOT_AVAILABLE'
+        return this.assignmentId != 'ASSIGNMENT_ID_NOT_AVAILABLE' 
         && this.isImageLoaded
         && (!this.annotationsEmpty() || this.acceptEmpty)
         && (!this.orphansOrChildless() || this.acceptOrphans);

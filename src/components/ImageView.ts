@@ -197,9 +197,10 @@ export default class ImageView extends Vue {
 
         if (this.answer) {
             for (const annotation of this.answer.annotations) {
+                this.anno.addAnnotation(annotation);
                 this.annotationStore.addAnnotation(annotation);
             }
-            this.reRenderAnnotations();
+            //this.reRenderAnnotations();
         }
         
         if (this.pointerActive) this.imView.addEventListener('mousemove', this.updateGuideLocation);
