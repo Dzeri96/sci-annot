@@ -178,7 +178,6 @@ export default class ScrollEdges extends Vue {
   top: var(--outer-edge-thickness);
   height: calc(100% - 2 * var(--outer-edge-thickness));
   width: var(--outer-edge-thickness);
-  background-color: rgba(173, 42, 42, 0.5);
 }
 
 #top-edge {
@@ -186,7 +185,6 @@ export default class ScrollEdges extends Vue {
   left: var(--outer-edge-thickness);
   width: calc(100% - 2 * var(--outer-edge-thickness));
   height: var(--outer-edge-thickness);
-  background-color: rgba(42, 147, 173, 0.5);
 }
 
 #right-edge {
@@ -194,7 +192,6 @@ export default class ScrollEdges extends Vue {
   right: 0;
   height: calc(100% - 2 * var(--outer-edge-thickness));
   width: var(--outer-edge-thickness);
-  background-color: rgba(151, 42, 173, 0.5);
 }
 
 #bottom-edge {
@@ -202,13 +199,11 @@ export default class ScrollEdges extends Vue {
   left: var(--outer-edge-thickness);
   width: calc(100% - 2 * var(--outer-edge-thickness));
   height: var(--outer-edge-thickness);
-  background-color: rgba(42, 173, 53, 0.5);
 }
 
 .corner {
   height: var(--outer-edge-thickness);
   width: var(--outer-edge-thickness);
-  background-color: rgba(160, 173, 42, 0.5);
 }
 
 #left-bottom-corner {
