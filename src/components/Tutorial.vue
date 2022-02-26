@@ -17,10 +17,19 @@
 			<div class="tut-unit">
 				<ul>
 					<li>
-						Logos and other decorative images are not counted as scientific figures
+						Logos and other decorative images are not counted as scientific figures.
 					</li>
 				</ul>
 				<img src="../assets/bad_example_logos.webp"/>
+			</div>
+
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Formulas are not counted as scientific figures.
+					</li>
+				</ul>
+				<img src="../assets/bad_example_formulas.webp"/>
 			</div>
 
 			<div class="tut-unit">
@@ -44,6 +53,7 @@
 						<source src="../assets/caption_selection.webm" type="video/webm"/>
 				</video>
 			</div>
+			
 
 			<div class="tut-unit">
 				<ul>
@@ -51,6 +61,14 @@
 						It can happen that a page contains a figure or table without a caption and vice versa.
 						In such a case you will see <i style="color: #D88C9A">No Reference</i> or <i style="color: #D88C9A">No Caption</i> in the bounding box.
 						If you are really sure you have selected everything correctly, check <b>Elements without reference/caption</b> next to the submit button.
+					</li>
+				</ul>
+			</div>
+
+			<div class="tut-unit">
+				<ul>
+					<li>
+						If you're not sure if an element is a figure or a table, check the caption, as it usually mentions the type of element it refers to. 
 					</li>
 				</ul>
 			</div>
