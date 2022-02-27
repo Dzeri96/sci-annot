@@ -75,6 +75,8 @@ export default class AppHeader extends Vue {
     private assignment: any;
     @Prop()
     private assignmentUrl: string;
+    @Prop()
+    private assignmentId: string;
 
     private counter = 0;
     private urlParams = new URLSearchParams(window.location.search);
@@ -83,8 +85,7 @@ export default class AppHeader extends Vue {
     private majorVersion = this.appVersion.match(/\d+/)[0];
     private SEEN_TUTORIAL_KEY = `${this.majorVersion}_seenTutorial`;
     private ACCEPTED_NO_REF_KEY = `${this.majorVersion}_acceptedNoRef`;
-    // Placeholder value for the MTurk assignment id
-    private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
+    
     // Placeholder value for the MTurk submit link
     private submitLink = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
     // Parsed from query params, if it exists
@@ -128,10 +129,6 @@ export default class AppHeader extends Vue {
         if (submitParam) {
             this.submitLink = submitParam + '/mturk/externalSubmit';
         }
-
-        // Get assignment id from URL params
-        let idParam = this.urlParams.get('assignmentId');
-        if (idParam) this.assignmentId = idParam;
 
         let commentParam = this.urlParams.get('comment');
         if (commentParam) this.comment = commentParam;

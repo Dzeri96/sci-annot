@@ -12,7 +12,8 @@ import ScrollEdges from './ScrollEdges.vue';
 @Options({
     props: {
         annotationStore: AnnotationStore,
-        answer: Answer
+        answer: Answer,
+        assignmentId: String
     },
     components: {
         ScrollEdges
@@ -21,6 +22,7 @@ import ScrollEdges from './ScrollEdges.vue';
 export default class ImageView extends Vue {
     private annotationStore!: AnnotationStore;
     private answer: Answer;
+    private assignmentId: string;
     private anno;
     private imLoaded = false;
 
@@ -76,7 +78,7 @@ export default class ImageView extends Vue {
 
         let widgetOpenObserver = new MutationObserver(handleEditorOpenOrClosed);
 
-        let imageUrl = this.urlParams.get('image') ?? placeholderPic;
+        let imageUrl = (this.urlParams.get('image') && this.assignmentId != 'ASSIGNMENT_ID_NOT_AVAILABLE') ? this.urlParams.get('image'):placeholderPic;
         // Reference: https://openseadragon.github.io/docs/OpenSeadragon.html
         this.viewer = OpenSeadragon({
             id: 'imview',
@@ -92,7 +94,6 @@ export default class ImageView extends Vue {
             },
             showNavigator: true,
             zoomPerSecond: 0,
-            imageSmoothingEnabled: false,
             animationTime: 0,
             navigatorPosition: 'BOTTOM_RIGHT',
             maxZoomLevel: 10,
@@ -210,7 +211,7 @@ export default class ImageView extends Vue {
             if(event.key == 'Shift') {
                 this.shiftButtonHeld = true;
                 this.changePointerState(false);
-            } else if (event.code == 'Space') {
+            } else if (event.code == 'Space' || event.code == 'Enter') {
                 let widgetFooterArray = document.getElementsByClassName('r6o-footer');
                 if (widgetFooterArray.length) {
                     // The number of buttons changes - always get the last one

@@ -26,5 +26,3 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## TODO
 No ref/caption warning doesn't show up in review mode until annotation is clicked
-Preview in MTurk should show the preview page
-Add enter/escape key handling

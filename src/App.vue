@@ -8,11 +8,12 @@
       :isImageLoaded="isImageLoaded"
       :assignment="assignment"
       :assignmentUrl="assignmentUrl"
+      :assignmentId="assignmentId"
     />
   </header>
   <main>
     <tutorial v-if="!answer" :class="{collapse: !isTutorialVisible}" id="tutorial"/>
-    <image-view v-if="assignmentLoaded" :answer="answer" :annotation-store="store" @image-loaded="imageLoaded"/>
+    <image-view v-if="assignmentLoaded" :answer="answer" :annotation-store="store" :assignmentId="assignmentId" @image-loaded="imageLoaded"/>
   </main>
   <footer></footer>
 </template>
@@ -44,9 +45,14 @@ export default class App extends Vue {
   answer = null;
   assignment = null;
   assignmentUrl = null;
+  // Placeholder value for the MTurk assignment id
+  private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
 
   async beforeMount() {
     this.assignmentUrl = this.urlParams.get('assignmentUrl');
+    // Get assignment id from URL params
+    let idParam = this.urlParams.get('assignmentId');
+    if (idParam) this.assignmentId = idParam;
     if (this.assignmentUrl) {
       fetch(this.assignmentUrl)
         .then(async response => {
