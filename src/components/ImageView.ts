@@ -195,14 +195,6 @@ export default class ImageView extends Vue {
             this.currentlyDrawing = false;
             this.changePointerState(true);
         });
-
-        if (this.answer) {
-            for (const annotation of this.answer.annotations) {
-                this.anno.addAnnotation(annotation);
-                this.annotationStore.addAnnotation(annotation);
-            }
-            //this.reRenderAnnotations();
-        }
         
         if (this.pointerActive) this.imView.addEventListener('mousemove', this.updateGuideLocation);
 
@@ -228,6 +220,20 @@ export default class ImageView extends Vue {
                 this.changePointerState(true);
             }
         });
+
+        if (this.answer) {
+            for (const annotation of this.answer.annotations) {
+                //this.anno.addAnnotation(annotation);
+                this.annotationStore.addAnnotation(annotation);
+            }
+            // This is a workaround for Firefox not showing the formatter output properly
+            // TODO: remove
+            setTimeout(() => {
+                this.reRenderAnnotations()
+                //this.anno.selectAnnotation(firstAnno);
+                //this.anno.cancelSelected();
+            }, 350)
+        }   
 
         //(document.getElementById('contentDiv').querySelector('.openseadragon-canvas') as any).focus();
     }

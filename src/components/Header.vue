@@ -118,12 +118,11 @@ export default class AppHeader extends Vue {
         console.log(`App version: ${this.appVersion}`);
 
         //if (this.assignmentId == 'ASSIGNMENT_ID_NOT_AVAILABLE') this.$emit('toggle-tutorial');
-        this.tutorialSeen = !!localStorage.getItem(this.SEEN_TUTORIAL_KEY);
+        this.tutorialSeen = !!localStorage.getItem(this.SEEN_TUTORIAL_KEY) || this.assignmentId != 'ASSIGNMENT_ID_NOT_AVAILABLE';
 
         // Get submit link from URL params
         if (this.assignmentUrl) {
             this.submitLink = this.assignmentUrl;
-            this.assignmentId = 'ADMIN_ASSIGNMENT';
         } 
         let submitParam = this.urlParams.get('turkSubmitTo');
         if (submitParam) {

@@ -52,7 +52,11 @@ export default class App extends Vue {
     this.assignmentUrl = this.urlParams.get('assignmentUrl');
     // Get assignment id from URL params
     let idParam = this.urlParams.get('assignmentId');
-    if (idParam) this.assignmentId = idParam;
+    if (this.assignmentUrl) {
+      this.assignmentId = 'ADMIN_ASSIGNMENT';
+    } else if (idParam) {
+      this.assignmentId = idParam;
+    }
     if (this.assignmentUrl) {
       fetch(this.assignmentUrl)
         .then(async response => {

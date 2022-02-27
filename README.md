@@ -25,4 +25,3 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ## TODO
-No ref/caption warning doesn't show up in review mode until annotation is clicked
