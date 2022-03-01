@@ -14,6 +14,39 @@
 				</video>
 			</div>
 			
+
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Draw bounding boxes around tables.
+					</li>
+				</ul>
+				<video autoplay loop inline muted>
+					<source src="../assets/table_selection.webm" type="video/webm"/>
+				</video>
+			</div>
+
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Draw bounding boxes around captions and select elements that they refer to.
+					</li>
+				</ul>
+				<video autoplay loop inline muted>
+						<source src="../assets/caption_selection.webm" type="video/webm"/>
+				</video>
+			</div>
+
+			<div class="tut-unit">
+				<ul>
+					<li>
+						Some tables have footers in addition to captions.
+						Include these in the table's bounding box.
+					</li>
+				</ul>
+				<img src="../assets/table_with_footer.webp"/>
+			</div>
+
 			<div class="tut-unit">
 				<ul>
 					<li>
@@ -30,28 +63,6 @@
 					</li>
 				</ul>
 				<img src="../assets/bad_example_formulas.webp"/>
-			</div>
-
-			<div class="tut-unit">
-				<ul>
-					<li>
-						Draw bounding boxes around tables.
-					</li>
-				</ul>
-				<video autoplay loop inline muted>
-						<source src="../assets/table_selection.webm" type="video/webm"/>
-				</video>
-			</div>
-
-			<div class="tut-unit">
-				<ul>
-					<li>
-						Draw bounding boxes around captions and select elements that they refer to.
-					</li>
-				</ul>
-				<video autoplay loop inline muted>
-						<source src="../assets/caption_selection.webm" type="video/webm"/>
-				</video>
 			</div>
 			
 
@@ -76,7 +87,7 @@
 			<div class="tut-unit">
 				<ul>
 					<li>
-						If you wish to submit feedback together with your HIT results, click the button on the top right.
+						If you wish to submit feedback or report issues together with your HIT results, click the button on the top right.
 						We appreciate any improvement suggestions!
 					</li>
 				</ul>
