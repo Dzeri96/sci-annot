@@ -101,7 +101,7 @@
 						Select the desired class with your keyboard's number row: <span class="hotkey">1</span>, <span class="hotkey">2</span>, <span class="hotkey">3</span>.
 					</li>
 					<li>
-						Select the parent with <span class="hotkey">Q</span>, <span class="hotkey">W</span>, <span class="hotkey">E</span>.
+						Select the reference with keys <span class="hotkey">Q</span>, <span class="hotkey">W</span>, <span class="hotkey">E</span>.
 					</li>
 					<li>
 						Save selection with the <span class="hotkey">Space</span> key.

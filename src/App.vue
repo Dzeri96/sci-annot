@@ -152,15 +152,16 @@ button:disabled img{
   opacity: 50%;
 }
 
-button:hover:enabled:not(.r6o-btn),
-input:hover[type=submit]:enabled:not(.r6o-btn) {
-  background-color: rgb(245, 245, 245);
+button:hover:enabled:not(.r6o-btn):not(.selected),
+input:hover[type=submit]:enabled:not(.r6o-btn):not(.selected) {
+  background-color: #e6f2ff;
 }
 
 button:active:enabled:not(.r6o-btn),
 button.selected:enabled,
 input:active[type=submit]:enabled:not(.r6o-btn) {
-  background-color: rgb(229, 229, 229);
+  background-color: #4483c4;
+  color: white;
 }
 
 button:focus:enabled:not(.r6o-btn),

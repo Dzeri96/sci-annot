@@ -102,7 +102,7 @@ export default class AnnotationStore {
         if (friendlyName) {
             return friendlyName;
         } else {
-            console.log(`Friendly name for id ${id} does not exist!`);
+            //console.log(`Friendly name for id ${id} does not exist!`);
             return undefined;
         }
     }
@@ -197,7 +197,7 @@ export default class AnnotationStore {
     }
 
     public addAnnotation = (anno: Annotation) => {
-        console.log(`Adding annotation ${anno.id}`);
+        //console.log(`Adding annotation ${anno.id}`);
         let annoClass = this.getAnnotationClass(anno);
         // Annotation has one of the parent classes.
         if (this.parentTypes.indexOf(annoClass) != -1) {
