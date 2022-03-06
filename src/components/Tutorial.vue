@@ -31,6 +31,8 @@
 					<li>
 						Draw bounding boxes around captions and select elements that they refer to.
 						Captions are short units of text that usually start with <b>Figure</b> or <b>Table</b>.
+						They can be positioned both above and under a table or figure they refer to.
+						In very rare cases they can even appear on the sides.
 					</li>
 				</ul>
 				<video autoplay loop inline muted>
