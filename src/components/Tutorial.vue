@@ -65,6 +65,16 @@
 				</ul>
 				<img src="../assets/bad_example_formulas.webp"/>
 			</div>
+
+			<div class="tut-unit">
+				<ul>
+					<li>
+						In most cases, the bounding boxes should not overlap.
+						However, if an overlap is mandated by an uncommon page layout, go ahead and still submit the HIT.
+					</li>
+				</ul>
+				<img src="../assets/bad_example_overlapping_boxes.webp"/>
+			</div>
 			
 
 			<div class="tut-unit">
