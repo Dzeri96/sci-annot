@@ -30,6 +30,7 @@
 				<ul>
 					<li>
 						Draw bounding boxes around captions and select elements that they refer to.
+						Captions are short units of text that usually start with <b>Figure</b> or <b>Table</b>.
 					</li>
 				</ul>
 				<video autoplay loop inline muted>
