@@ -225,6 +225,7 @@ export default class ImageView extends Vue {
             for (const annotation of this.answer.annotations) {
                 //this.anno.addAnnotation(annotation);
                 this.annotationStore.addAnnotation(annotation);
+                this.annotationStore.refreshFreeParents();
             }
             // This is a workaround for Firefox not showing the formatter output properly
             // TODO: remove

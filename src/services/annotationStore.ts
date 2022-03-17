@@ -85,6 +85,7 @@ export default class AnnotationStore {
         public parentTypes: string[],
         public childTypes: string[],
         public annotations?: Annotation[],
+        // TODO: Maybe turn this into a Set
         public freeParents?: string[]
     ) {
         this.friendlyIdMap = new TwoWayMap({});
@@ -151,8 +152,6 @@ export default class AnnotationStore {
         let foundIndex = this.freeParents.indexOf(parentId);
         if (foundIndex != -1) {
             this.freeParents.splice(foundIndex, 1);
-        } else {
-            throw `Parent with id ${parentId} already has a child!`;
         }
     }
 
@@ -163,7 +162,7 @@ export default class AnnotationStore {
         }
     }
 
-    private refreshFreeParents() {
+    public refreshFreeParents() {
         let foundParents = [];
         let takenParents = new Set();
 
