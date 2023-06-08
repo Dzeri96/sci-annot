@@ -66,41 +66,41 @@ import YesNoModal from './YesNoModal.vue';
 })
 export default class AppHeader extends Vue {
     @Prop()
-    private annotationStore: AnnotationStore;
+    annotationStore: AnnotationStore;
     @Prop()
-    private isTutorialVisible: boolean;
+    isTutorialVisible: boolean;
     @Prop()
-    private isImageLoaded: boolean;
+    isImageLoaded: boolean;
     @Prop()
-    private assignment: any;
+    assignment: any;
     @Prop()
-    private assignmentUrl: string;
+    assignmentUrl: string;
     @Prop()
-    private assignmentId: string;
+    assignmentId: string;
 
-    private counter = 0;
+    counter = 0;
     private urlParams = new URLSearchParams(window.location.search);
     // Injected from package.json
-    private appVersion = process.env.VUE_APP_VERSION;
+    appVersion = process.env.VUE_APP_VERSION;
     private majorVersion = this.appVersion.match(/\d+/)[0];
     private SEEN_TUTORIAL_KEY = `${this.majorVersion}_seenTutorial`;
     private ACCEPTED_NO_REF_KEY = `${this.majorVersion}_acceptedNoRef`;
     
     // Placeholder value for the MTurk submit link
-    private submitLink = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
+    submitLink = 'https://webhook.site/9c353bcf-91aa-4d88-96f3-93c351b9562f';
     // Parsed from query params, if it exists
-    private comment = '';
-    private csrfToken = null;
-    private acceptEmpty: boolean = false;
-    private acceptOrphans: boolean = false;
-    private showFeedbackModal = false;
-    private showYesNoModal = false;
+    comment = '';
+    csrfToken = null;
+    acceptEmpty: boolean = false;
+    acceptOrphans: boolean = false;
+    showFeedbackModal = false;
+    showYesNoModal = false;
 
     // Saved in local storage
-    private tutorialSeen = false;
+    tutorialSeen = false;
     private acceptedNoRef = false;
 
-    private submit(e: Event) {
+    submit(e: Event) {
         if (this.acceptOrphans && !this.acceptedNoRef) {
             this.showYesNoModal = true;
             e.preventDefault();
@@ -131,7 +131,8 @@ export default class AppHeader extends Vue {
 
         let commentParam = this.urlParams.get('comment');
         if (commentParam) this.comment = commentParam;
-
+        
+        // TODO: Turn to camelCase
         let csrfParam = this.urlParams.get('csrf_token');
         if (csrfParam) {
             console.log('Loaded CSRF!');

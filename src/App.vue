@@ -46,7 +46,7 @@ export default class App extends Vue {
   assignment = null;
   assignmentUrl = null;
   // Placeholder value for the MTurk assignment id
-  private assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
+  assignmentId = 'ASSIGNMENT_ID_NOT_AVAILABLE';
 
   async beforeMount() {
     this.assignmentUrl = this.urlParams.get('assignmentUrl');

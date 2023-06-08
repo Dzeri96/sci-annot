@@ -13,7 +13,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env", "raw-loader.d.ts", "node"
+      "webpack-env", "node"
     ],
     "paths": {
       "@/*": [
