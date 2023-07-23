@@ -1,3 +1,8 @@
-export const rules = {
-    "no-unused-vars": "off"
+module.exports = {
+    rules: {
+        "no-unused-vars": "off"
+    },
+    extends: [
+        "plugin:vue/essential"
+    ]
 };

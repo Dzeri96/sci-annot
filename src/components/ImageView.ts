@@ -1,7 +1,7 @@
 let OpenSeadragon = require('openseadragon');
-let Annotorious = require('@dzeri96/annotorious-openseadragon');
+let Annotorious = require('@recogito/annotorious-openseadragon');
 let placeholderPic = require('../assets/96d834586a304382bd623f81b83e3b62-09.webp');
-import '@dzeri96/annotorious-openseadragon/dist/annotorious.min.css';
+import '@recogito/annotorious-openseadragon/dist/annotorious.min.css';
 import FigCapWidget from '../widgets/figure-caption';
 import { Options, Vue } from "vue-class-component";
 import AnnotationStore from '@/services/annotationStore';
@@ -146,7 +146,7 @@ export default class ImageView extends Vue {
                 {widget: figCapWidgetFunc, force: 'plainjs'}
             ],
             formatter: figCapWidget.figCapFormatter,
-            invertDrawingMode: true
+            hotkey: {key: 'Shift', inverted: true}
         }
         this.anno = Annotorious(this.viewer, annoConfig);
         this.anno.setDrawingTool('rect');
